@@ -1,7 +1,5 @@
 package io.chrisdavenport.vault
 
-import cats.Monoid
-
 /**
   * Vault - A persistent store for values of arbitrary types.
   **/
@@ -50,15 +48,4 @@ object Vault {
   def union(v1: Vault, v2: Vault): Vault = 
     Vault(v1.m ++ v2.m)
 
-  /**
-    * Vault Instances
-    * Semigroup
-    * Monoid
-    **/
-  implicit val vaultInstances : Monoid[Vault] = new Monoid[Vault]{
-    def empty: Vault = 
-      Vault.empty
-    def combine(x: Vault,y: Vault): Vault = 
-      Vault.union(x, y)
-  }
 }
