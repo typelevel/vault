@@ -24,8 +24,7 @@ class VaultSpec extends Specification with ScalaCheck {
       }
       test.unsafeRunSync must_=== l.headOption
     }
-    "contain no value after being emptied" >> prop {
-      l: List[String]=> 
+    "contain no value after being emptied" >> prop { l: List[String]=> 
       val emptyVault : Vault = Vault.empty
       val test : IO[Option[String]] = Key.newKey[IO, String].map{k => 
         l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).empty.lookup(k)
