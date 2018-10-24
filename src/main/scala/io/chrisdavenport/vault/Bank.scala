@@ -10,6 +10,7 @@ import cats.effect.concurrent.Ref
 trait Bank[F[_]]{
   def createKey[A]: F[Key[A]]
   def lookup[A](k: Key[A]): F[Option[A]]
+  def lookupOrError[A](k: Key[A]): F[A]
   def empty : F[Unit]
   def insert[A](k: Key[A], a: A): F[Unit]
   def delete[A](k: Key[A]): F[Unit]
@@ -21,6 +22,9 @@ object Bank {
     def createKey[A]: F[Key[A]] = Key.createKey[F, A]
     def lookup[A](k: Key[A]): F[Option[A]] = 
       ref.get.map(_.lookup(k))
+    def lookupOrError[A](k: Key[A]): F[A] =
+      ref.get.map(_.lookup(k))
+        .flatMap(_.fold(Sync[F].raiseError[A](new NoSuchElementException))(_.pure[F]))
     def empty : F[Unit] = ref.set(Vault.empty)
     def insert[A](k: Key[A], a: A): F[Unit] = 
       ref.update(_.insert(k, a))
