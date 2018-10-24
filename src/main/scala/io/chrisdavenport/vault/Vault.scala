@@ -1,9 +1,7 @@
 package io.chrisdavenport.vault
 
 import cats.implicits._
-import cats.effect._
-import cats.effect.concurrent.Ref
-
+import cats.effect.Sync
 object Vault {
   private[vault] final class Unique
   private[vault] object Unique {
@@ -13,24 +11,21 @@ object Vault {
   /**
     * Lockers
     **/
-  final case class Key[A] private (private[vault] unique: Unique, private[vault] a: Ref[IO, Option[A]])
+  final case class Key[A] private (private[vault] unique: Unique)
   object Key {
-    def newKey[A]: IO[Key[A]] = for {
-      unique <- Unique.newUnique[IO]
-      ref <- Ref.of[IO, Option[A]](None)
-    } yield Key[A](unique, ref)
+    def newKey[F[_]: Sync, A]: F[Key[A]] = Unique.newUnique[F].map(Key[A])
   }
-  final case class Locker private (private[vault] unique: Unique, private[vault] a: IO[Unit]){
+  final case class Locker private (private[vault] unique: Unique, private[vault] a: Any){
     def unlock[A](k: Key[A]): Option[A] = Locker.unlock(k, this)
   }
   object Locker {
     def lock[A](k: Key[A], a: A): Locker = k match {
-      case Key(u, ref) => Locker(u, ref.update(_ => Some(a)))
+      case Key(u) => Locker(u, a.asInstanceOf[Any])
     }
     def unlock[A](k: Key[A], l: Locker): Option[A] = (k, l) match {
       // Equality By Reference Equality
-      case (Key(u1, ref), Locker(u2, m)) if u1 == u2 => 
-        (m >> ref.get).unsafeRunSync // Race Condition
+      case (Key(u1), Locker(u2, a)) if u1 == u2 => 
+        Some(a.asInstanceOf[A])
       case _ => None
     }
   }
@@ -39,18 +34,21 @@ object Vault {
     * Vault
     * Implemented as a collection of lockers
     **/
-  final case class Vault private (private[vault] m: Map[Unique, Locker])
+  final case class Vault private (private[vault] m: Map[Unique, Locker]){
+    def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
+    def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
+    def delete[A](k: Key[A]): Vault = Vault.delete(k, this)
+  }
   object Vault {
     def empty = Vault(Map.empty)
     def lookup[A](k: Key[A], v: Vault): Option[A] = (k, v) match {
-      case (key@Key(k, _), Vault(m)) => m.get(k).flatMap{locker => Locker.unlock(key, locker)}
+      case (key@Key(k), Vault(m)) => m.get(k).flatMap{locker => Locker.unlock(key, locker)}
     }
-
     def insert[A](k: Key[A], a:A, v: Vault): Vault = (k, v) match {
-      case (key@Key(k, _), Vault(m)) => Vault(m + (k -> Locker.lock(key, a)))
+      case (key@Key(k), Vault(m)) => Vault(m + (k -> Locker.lock(key, a)))
     }
     def delete[A](k: Key[A], v: Vault): Vault = (k, v) match {
-      case (Key(k, _), Vault(m)) => Vault(m - k)
+      case (Key(k), Vault(m)) => Vault(m - k)
     }
   }
 
