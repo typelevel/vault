@@ -1,22 +1,13 @@
 package io.chrisdavenport.vault
 
-import cats._
 import cats.implicits._
-import cats.effect.IO
+import cats.effect._
 import cats.effect.concurrent.Ref
 
 object Vault {
-  private[vault] final case class Unique (i: Int)
+  private[vault] final class Unique
   private[vault] object Unique {
-    implicit val uniqueInstances: Eq[Unique] = Eq.by(_.i)
-
-    // Global Source of Uniqueness
-    private lazy val uniqueSource: Ref[IO, Int] = Ref.of[IO, Int](0).unsafeRunSync
-    def newUnique: IO[Unique] = uniqueSource.modify{value => 
-      val z = value + 1 
-      (z,z)
-    }.map(Unique(_))
-
+    def newUnique[F[_]: Sync]: F[Unique] = Sync[F].delay(new Unique)
   }
 
   /**
@@ -29,7 +20,8 @@ object Vault {
     case Key(u, ref) => Locker(u, ref.update(_ => Some(a)))
   }
   def unlock[A](k: Key[A], l: Locker): Option[A] = (k, l) match {
-    case (Key(u1, ref), Locker(u2, m)) if u1 === u2 => 
+    // Equality By Reference Equality
+    case (Key(u1, ref), Locker(u2, m)) if u1 == u2 => 
       (m >> ref.get).unsafeRunSync // Race Condition
     case _ => None
   }
@@ -42,8 +34,8 @@ object Vault {
 
   def empty = Vault(Map.empty)
 
-  def newKey[S, A]: IO[Key[A]] = for {
-    unique <- Unique.newUnique
+  def newKey[A]: IO[Key[A]] = for {
+    unique <- Unique.newUnique[IO]
     ref <- Ref.of[IO, Option[A]](None)
   } yield Key[A](unique, ref)
 
