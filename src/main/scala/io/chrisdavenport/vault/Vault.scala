@@ -8,6 +8,8 @@ final case class Vault private (private[vault] m: Map[Unique, Locker]) {
   def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
   def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
   def delete[A](k: Key[A]): Vault = Vault.delete(k, this)
+  def adjust[A](k: Key[A], f: A => A): Vault = Vault.adjust(k, f, this)
+  def ++(that: Vault): Vault = Vault.union(this, that)
 }
 object Vault {
   /**
