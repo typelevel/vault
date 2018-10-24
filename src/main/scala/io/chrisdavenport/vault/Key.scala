@@ -9,5 +9,5 @@ object Key {
   /**
    * Create A Typed Key
    */
-  def newKey[F[_]: Sync, A]: F[Key[A]] = Unique.newUnique[F].map(Key[A])
+  def createKey[F[_]: Sync, A]: F[Key[A]] = Unique.newUnique[F].map(Key[A])
 }
