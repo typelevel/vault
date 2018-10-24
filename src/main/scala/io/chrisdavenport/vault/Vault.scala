@@ -34,7 +34,7 @@ object Vault {
     * Vault
     * Implemented as a collection of lockers
     **/
-  final case class Vault private (private[vault] m: Map[Unique, Locker]){
+  final case class Vault private (private[vault] m: Map[Unique, Locker]) {
     def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
     def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
     def delete[A](k: Key[A]): Vault = Vault.delete(k, this)
