@@ -7,6 +7,9 @@ lazy val core = project.in(file("."))
 val catsV = "1.4.0"
 val catsEffectV = "1.0.0"
 
+val kindProjectorV = "0.9.8"
+val betterMonadicForV = "0.3.0-M4"
+
 lazy val contributors = Seq(
   "ChristopherDavenport" -> "Christopher Davenport"
 )
