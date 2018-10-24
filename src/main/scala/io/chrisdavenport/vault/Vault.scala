@@ -10,7 +10,9 @@ object Vault {
   object Unique {
     implicit val uniqueInstances: Eq[Unique] = Eq.by(_.i)
 
+    // Global Source of Uniqueness
     private lazy val uniqueSource: Ref[IO, Int] = Ref.of[IO, Int](0).unsafeRunSync
+
     def newUnique: IO[Unique] = uniqueSource.modify{value => 
       val z = value + 1 
       (z,z)
@@ -21,15 +23,15 @@ object Vault {
   /**
     * Lockers
     **/
-  final case class Key[S, A](private[vault] unique: Unique, private[vault] a: Ref[IO, Option[A]])
-  final case class Locker[S](private[vault] unique: Unique, private[vault] a: IO[Unit])
+  final case class Key[A](private[vault] unique: Unique, private[vault] a: Ref[IO, Option[A]])
+  final case class Locker(private[vault] unique: Unique, private[vault] a: IO[Unit])
 
-  def lock[S, A](k: Key[S, A], a: A): Locker[S] = k match {
+  def lock[A](k: Key[A], a: A): Locker = k match {
     case Key(u, ref) => Locker(u, ref.update(_ => Some(a)))
   }
-  def unlock[S, A](k: Key[S, A], l: Locker[S]): Option[A] = (k, l) match {
+  def unlock[A](k: Key[A], l: Locker): Option[A] = (k, l) match {
     case (Key(u1, ref), Locker(u2, m)) if u1 === u2 => 
-      (m >> ref.get).unsafeRunSync
+      (m >> ref.get).unsafeRunSync // Race Condition
     case _ => None
   }
 
@@ -37,14 +39,25 @@ object Vault {
     * Vault
     * Implemented as a collection of lockers
     **/
+  final case class Vault(private[vault] m: Map[Unique, Locker])
 
-  final case class Vault[S](private[vault] m: Map[Unique, Locker[S]])
+  def empty = Vault(Map.empty)
 
-  def empty[S] = Vault[S](Map.empty)
-
-  def newKey[S, A]: IO[Key[S, A]] = for {
+  def newKey[S, A]: IO[Key[A]] = for {
     unique <- Unique.newUnique
     ref <- Ref.of[IO, Option[A]](None)
-  } yield Key[S, A](unique, ref)
+  } yield Key[A](unique, ref)
+
+  def lookup[A](k: Key[A], v: Vault): Option[A] = (k, v) match {
+    case (key@Key(k, _), Vault(m)) => m.get(k).flatMap{locker => unlock(key, locker)}
+  }
+
+  def insert[A](k: Key[A], a:A, v: Vault): Vault = (k, v) match {
+    case (key@Key(k, _), Vault(m)) => Vault(m + (k -> lock(key, a)))
+  }
+
+  def delete[A](k: Key[A], v: Vault): Vault = (k, v) match {
+    case (Key(k, _), Vault(m)) => Vault(m - k)
+  }
 
 }
