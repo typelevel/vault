@@ -1,4 +1,8 @@
 ---
+layout: home
+
+---
+
 # vault [![Build Status](https://travis-ci.com/ChristopherDavenport/vault.svg?branch=master)](https://travis-ci.com/ChristopherDavenport/vault) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12)
 
 ## Project Goals
