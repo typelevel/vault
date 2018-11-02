@@ -1,0 +1,52 @@
+<hr />
+<h1 id="vault--">vault <a href="https://travis-ci.com/ChristopherDavenport/vault"><img src="https://travis-ci.com/ChristopherDavenport/vault.svg?branch=master" alt="Build Status" /></a> <a href="https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12"><img src="https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg" alt="Maven Central" /></a></h1>
+
+<h2 id="project-goals">Project Goals</h2>
+
+<p>Vault is a tiny library that provides a single data structure called vault.</p>
+
+<p>Inspiration was drawn from <a href="https://github.com/HeinrichApfelmus/vault">HeinrichApfelmus/vault</a> and the original <a href="https://apfelmus.nfshost.com/blog/2011/09/04-vault.html">blog post</a></p>
+
+<p>A vault is a type-safe, persistent storage for values of arbitrary types. Like <code class="highlighter-rouge">Ref</code>, it should be capable of storing values of any type in it, but unlike <code class="highlighter-rouge">Ref</code>, behave like a persistent, first-class data structure.</p>
+
+<p>It is analogous to a bank vault, where you can access different bank boxes with different keys; hence the name.</p>
+
+<h2 id="quick-start">Quick Start</h2>
+
+<p>To use vault in an existing SBT project with Scala 2.11 or a later version, add the following dependencies to your
+<code class="highlighter-rouge">build.sbt</code> depending on your needs:</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+  <span class="s">"io.chrisdavenport"</span> <span class="o">%%</span> <span class="s">"vault"</span> <span class="o">%</span> <span class="s">"&lt;version&gt;"</span><span class="o">,</span>
+<span class="o">)</span>
+</code></pre>
+</div>
+
+<p>First the imports</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.effect._</span>
+<span class="k">import</span> <span class="nn">io.chrisdavenport.vault._</span>
+</code></pre>
+</div>
+
+<p>Then some basic operations</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Bar</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">c</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
+<span class="c1">// defined class Bar
+</span>
+<span class="c1">// Creating keys are effects, but interacting with the vault
+// not, it acts like a simple persistent store.
+</span>
+<span class="k">val</span> <span class="n">basicLookup</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
+  <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span>
+    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
+    <span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="c1">// basicLookup: cats.effect.IO[Option[Bar]] = &lt;function1&gt;
+</span>
+<span class="n">basicLookup</span><span class="o">.</span><span class="n">unsafeRunSync</span>
+<span class="c1">// res3: Option[Bar] = Some(Bar(,1,2))
+</span></code></pre>
+</div>

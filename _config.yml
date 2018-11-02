@@ -1,0 +1,11 @@
+name: vault
+baseurl: /vault
+description: Type-safe, persistent storage for values of arbitrary types
+highlighter: rouge
+docs: true
+collections:
+  tut:
+    output: true
+version: 0.0.3-SNAPSHOT
+org: io.chrisdavenport
+markdown: kramdown
