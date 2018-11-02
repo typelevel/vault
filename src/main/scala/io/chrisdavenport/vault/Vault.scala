@@ -3,7 +3,7 @@ package io.chrisdavenport.vault
 /**
  * Vault - A persistent store for values of arbitrary types.
  */
-final case class Vault private (private[vault] m: Map[Unique, Locker]) {
+final class Vault private (private[vault] val m: Map[Unique, Locker]) {
   def empty : Vault = Vault.empty
   def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
   def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
@@ -15,29 +15,26 @@ object Vault {
   /**
    * The Empty Vault 
    */
-  def empty = Vault(Map.empty)
+  def empty = new Vault(Map.empty)
 
   /**
    * Lookup the value of a key in the vault
    */
-  def lookup[A](k: Key[A], v: Vault): Option[A] = (k, v) match {
-    case (key@Key(k), Vault(m)) => m.get(k).flatMap{locker => Locker.unlock(key, locker)}
-  }
-
+  def lookup[A](k: Key[A], v: Vault): Option[A] = 
+    v.m.get(k.unique).flatMap(l => Locker.unlock(k, l))
+  
   /**
    * Insert a value for a given key. Overwrites any previous value.
    */
-  def insert[A](k: Key[A], a:A, v: Vault): Vault = (k, v) match {
-    case (key@Key(k), Vault(m)) => Vault(m + (k -> Locker.lock(key, a)))
-  }
+  def insert[A](k: Key[A], a: A, v: Vault): Vault = 
+    new Vault(v.m + (k.unique -> Locker.lock(k, a)))
   
   /**
    * Delete a key from the vault
    */
-  def delete[A](k: Key[A], v: Vault): Vault = (k, v) match {
-    case (Key(k), Vault(m)) => Vault(m - k)
-  }
-
+  def delete[A](k: Key[A], v: Vault): Vault = 
+    new Vault(v.m - k.unique)
+  
   /**
    * Adjust the value for a given key if it's present in the vault.
    */
@@ -48,6 +45,6 @@ object Vault {
    * Merge Two Vaults
    */
   def union(v1: Vault, v2: Vault): Vault = 
-    Vault(v1.m ++ v2.m)
+    new Vault(v1.m ++ v2.m)
 
 }

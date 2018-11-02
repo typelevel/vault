@@ -31,6 +31,13 @@ class VaultSpec extends Specification with ScalaCheck {
       }
       test.unsafeRunSync must_=== None
     }
+    "not be accessible via a different key" >> prop { i: Int => 
+      val test = for {
+        key1 <- Key.newKey[IO, Int]
+        key2 <- Key.newKey[IO, Int]
+      } yield Vault.empty.insert(key1, i).lookup(key2)
+      test.unsafeRunSync must_=== None
+    }
   }
 
 }
