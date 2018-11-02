@@ -1,8 +1,18 @@
-lazy val core = project.in(file("."))
+lazy val vault = project.in(file("."))
+  .settings(commonSettings, releaseSettings, skipOnPublishSettings)
+  .aggregate(core, docs)
+
+lazy val core = project.in(file("core"))
     .settings(commonSettings, releaseSettings)
     .settings(
       name := "vault"
     )
+
+lazy val docs = project.in(file("docs"))
+  .settings(commonSettings, releaseSettings, skipOnPublishSettings, micrositeSettings)
+  .dependsOn(core)
+  .enablePlugins(MicrositesPlugin)
+  .enablePlugins(TutPlugin)
 
 val catsV = "1.4.0"
 val catsEffectV = "1.0.0"
@@ -154,6 +164,40 @@ lazy val mimaSettings = {
     }
   )
 }
+
+lazy val micrositeSettings = Seq(
+  micrositeName := "vault",
+  micrositeDescription := "Type-safe, persistent storage for values of arbitrary types",
+  micrositeAuthor := "Christopher Davenport",
+  micrositeGithubOwner := "ChristopherDavenport",
+  micrositeGithubRepo := "vault",
+  micrositeBaseUrl := "/vault",
+  micrositeDocumentationUrl := "https://christopherdavenport.github.io/vault",
+  micrositeFooterText := None,
+  micrositeHighlightTheme := "atom-one-light",
+  micrositePalette := Map(
+    "brand-primary" -> "#3e5b95",
+    "brand-secondary" -> "#294066",
+    "brand-tertiary" -> "#2d5799",
+    "gray-dark" -> "#49494B",
+    "gray" -> "#7B7B7E",
+    "gray-light" -> "#E5E5E6",
+    "gray-lighter" -> "#F4F3F4",
+    "white-color" -> "#FFFFFF"
+  ),
+  fork in tut := true,
+  scalacOptions in Tut --= Seq(
+    "-Xfatal-warnings",
+    "-Ywarn-unused-import",
+    "-Ywarn-numeric-widen",
+    "-Ywarn-dead-code",
+    "-Ywarn-unused:imports",
+    "-Xlint:-missing-interpolator,_"
+  ),
+  libraryDependencies += "com.47deg" %% "github4s" % "0.19.0",
+  micrositePushSiteWith := GitHub4s,
+  micrositeGithubToken := sys.env.get("GITHUB_TOKEN")
+)
 
 lazy val skipOnPublishSettings = Seq(
   skip in publish := true,
