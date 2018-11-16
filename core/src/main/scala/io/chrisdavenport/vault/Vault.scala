@@ -1,9 +1,15 @@
 package io.chrisdavenport.vault
 
+import io.chrisdavenport.unique.Unique
 /**
  * Vault - A persistent store for values of arbitrary types.
+ * This extends the behavior of the locker, into a Map
+ * that maps Keys to Lockers, creating a heterogenous
+ * store of values, accessible by keys. Such that the Vault
+ * has no type information, all the type information is contained 
+ * in the keys.
  */
-final class Vault private (private[vault] val m: Map[Unique, Locker]) {
+final class Vault private (private val m: Map[Unique, Locker]) {
   def empty : Vault = Vault.empty
   def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
   def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
@@ -21,7 +27,7 @@ object Vault {
    * Lookup the value of a key in the vault
    */
   def lookup[A](k: Key[A], v: Vault): Option[A] = 
-    v.m.get(k.unique).flatMap(l => Locker.unlock(k, l))
+    v.m.get(k.unique).flatMap(Locker.unlock(k, _))
   
   /**
    * Insert a value for a given key. Overwrites any previous value.
