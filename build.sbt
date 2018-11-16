@@ -16,6 +16,7 @@ lazy val docs = project.in(file("docs"))
 
 val catsV = "1.4.0"
 val catsEffectV = "1.0.0"
+val uniqueV = "0.1.1"
 
 val kindProjectorV = "0.9.8"
 val betterMonadicForV = "0.3.0-M4"
@@ -42,6 +43,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel"               %% "cats-core"                  % catsV,
     "org.typelevel"               %% "cats-effect"                % catsEffectV,
+    "io.chrisdavenport"           %% "unique"                     % uniqueV,
     "org.specs2"                  %% "specs2-core"                % "4.3.5"     % Test,
     "org.specs2"                  %% "specs2-scalacheck"          % "4.3.5"     % Test
   )
