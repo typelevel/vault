@@ -50,4 +50,37 @@ val basicLookup = for {
 }
 
 basicLookup.unsafeRunSync
+
+val emptyLookup = for {
+  key <- Key.newKey[IO, Bar]
+} yield {
+  Vault.empty
+    .lookup(key)
+}
+
+emptyLookup.unsafeRunSync
+```
+
+We can also interact with a single value `locker` instead of the
+larger datastructure that a `vault` enables.
+
+```tut:book
+val lockerExample = for {
+  key <- Key.newKey[IO, Bar]
+} yield {
+  Locker.lock(key, Bar("", 1, 2L))
+    .unlock(key)
+}
+
+lockerExample.unsafeRunSync
+
+val wrongLockerExample = for {
+  key <- Key.newKey[IO, Bar]
+  key2 <- Key.newKey[IO, Bar]
+} yield {
+  Locker.lock(key, Bar("", 1, 2L))
+    .unlock(key2)
+}
+
+wrongLockerExample.unsafeRunSync
 ```
