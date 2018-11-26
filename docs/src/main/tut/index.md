@@ -59,6 +59,17 @@ val emptyLookup = for {
 }
 
 emptyLookup.unsafeRunSync
+
+val doubleInsertTakesMostRecent = for {
+  key <- Key.newKey[IO, Bar]
+} yield {
+  Vault.empty
+    .insert(key, Bar("", 1, 2L))
+    .insert(key, Bar("Monkey", 7, 5L))
+    .lookup(key)
+}
+
+doubleInsertTakesMostRecent.unsafeRunSync
 ```
 
 We can also interact with a single value `locker` instead of the
