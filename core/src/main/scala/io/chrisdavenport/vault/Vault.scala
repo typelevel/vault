@@ -10,11 +10,29 @@ import io.chrisdavenport.unique.Unique
  * in the keys.
  */
 final class Vault private (private val m: Map[Unique, Locker]) {
+  /**
+    * Empty this Vault
+    */
   def empty : Vault = Vault.empty
+  /**
+    * Lookup the value of a key in this vault
+    */
   def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
+  /**
+    * Insert a value for a given key. Overwrites any previous value.
+    */
   def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
+  /**
+    * Delete a key from the vault
+    */
   def delete[A](k: Key[A]): Vault = Vault.delete(k, this)
+  /**
+   * Adjust the value for a given key if it's present in the vault.
+   */
   def adjust[A](k: Key[A], f: A => A): Vault = Vault.adjust(k, f, this)
+  /**
+   * Merge Two Vaults. that is prioritized.
+   */
   def ++(that: Vault): Vault = Vault.union(this, that)
 }
 object Vault {
@@ -48,7 +66,7 @@ object Vault {
     lookup(k, v).fold(v)(a => insert(k, f(a), v))
 
   /**
-   * Merge Two Vaults
+   * Merge Two Vaults. v2 is prioritized.
    */
   def union(v1: Vault, v2: Vault): Vault = 
     new Vault(v1.m ++ v2.m)
