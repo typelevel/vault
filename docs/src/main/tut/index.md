@@ -70,6 +70,28 @@ val doubleInsertTakesMostRecent = for {
 }
 
 doubleInsertTakesMostRecent.unsafeRunSync
+
+val mergedVaultsTakesLatter = for {
+  key <- Key.newKey[IO, Bar]
+} yield {
+  (
+    Vault.empty.insert(key, Bar("", 1, 2L)) ++
+    Vault.empty.insert(key, Bar("Monkey", 7, 5L))
+  ).lookup(key)
+}
+
+mergedVaultsTakesLatter.unsafeRunSync
+
+val deletedKeyIsMissing = for {
+  key <- Key.newKey[IO, Bar]
+} yield {
+  Vault.empty
+    .insert(key, Bar("", 1, 2L))
+    .delete(key)
+    .lookup(key)
+}
+
+deletedKeyIsMissing.unsafeRunSync
 ```
 
 We can also interact with a single value `locker` instead of the
