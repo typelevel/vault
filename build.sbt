@@ -1,16 +1,23 @@
+import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
+
 lazy val vault = project.in(file("."))
   .settings(commonSettings, releaseSettings, skipOnPublishSettings)
-  .aggregate(core, docs)
+  .aggregate(coreJVM, coreJS, docs)
 
-lazy val core = project.in(file("core"))
-    .settings(commonSettings, releaseSettings)
-    .settings(
-      name := "vault"
-    )
+lazy val core = crossProject(JSPlatform, JVMPlatform)
+  .crossType(CrossType.Pure)
+  .in(file("core"))
+  .settings(commonSettings, releaseSettings)
+  .settings(
+    name := "vault"
+  )
+
+lazy val coreJVM = core.jvm
+lazy val coreJS = core.js
 
 lazy val docs = project.in(file("docs"))
   .settings(commonSettings, releaseSettings, skipOnPublishSettings, micrositeSettings)
-  .dependsOn(core)
+  .dependsOn(coreJVM)
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
@@ -41,11 +48,11 @@ lazy val commonSettings = Seq(
   addCompilerPlugin("org.spire-math" % "kind-projector" % kindProjectorV cross CrossVersion.binary),
   addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
   libraryDependencies ++= Seq(
-    "org.typelevel"               %% "cats-core"                  % catsV,
-    "org.typelevel"               %% "cats-effect"                % catsEffectV,
-    "io.chrisdavenport"           %% "unique"                     % uniqueV,
-    "org.specs2"                  %% "specs2-core"                % "4.3.5"     % Test,
-    "org.specs2"                  %% "specs2-scalacheck"          % "4.3.5"     % Test
+    "org.typelevel"               %%% "cats-core"                  % catsV,
+    "org.typelevel"               %%% "cats-effect"                % catsEffectV,
+    "io.chrisdavenport"           %%% "unique"                     % uniqueV,
+    "org.specs2"                  %%% "specs2-core"                % "4.3.5"     % Test,
+    "org.specs2"                  %%% "specs2-scalacheck"          % "4.3.5"     % Test
   )
 )
 
