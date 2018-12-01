@@ -21,7 +21,7 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "1.4.0"
+val catsV = "1.5.0"
 val catsEffectV = "1.0.0"
 val uniqueV = "0.1.1"
 
