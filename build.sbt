@@ -22,7 +22,7 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(TutPlugin)
 
 val catsV = "1.5.0"
-val catsEffectV = "1.0.0"
+val catsEffectV = "1.1.0"
 val uniqueV = "0.1.1"
 
 val kindProjectorV = "0.9.9"
