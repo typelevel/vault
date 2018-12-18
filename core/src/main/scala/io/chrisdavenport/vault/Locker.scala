@@ -14,7 +14,13 @@ import io.chrisdavenport.unique.Unique
  **/
 final class Locker private(private val unique: Unique, private val a: Any){
   /**
-   * Retrieve the value from the Locker
+   * Retrieve the value from the Locker. If the reference equality
+   * instance backed by a `Unique` value is the same then allows
+   * conversion to that type, otherwise as it does not match
+   * then this will be `None`
+   * 
+   * @param k The key to check, if the internal Unique value matches
+   * then this Locker can be unlocked as the specifed value
    */
   def unlock[A](k: Key[A]): Option[A] = Locker.unlock(k, this)
 }
@@ -26,7 +32,14 @@ object Locker {
   def lock[A](k: Key[A], a: A): Locker = new Locker(k.unique, a.asInstanceOf[Any])
 
   /**
-   * Retrieve the value from the Locker
+   * Retrieve the value from the Locker. If the reference equality
+   * instance backed by a `Unique` value is the same then allows
+   * conversion to that type, otherwise as it does not match
+   * then this will be `None`
+   * 
+   * @param k The key to check, if the internal Unique value matches
+   * then this Locker can be unlocked as the specifed value
+   * @param l The locked to check against
    */
   def unlock[A](k: Key[A], l: Locker): Option[A] = 
     // Equality By Reference Equality
