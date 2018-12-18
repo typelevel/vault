@@ -7,7 +7,7 @@ lazy val vault = project.in(file("."))
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
-  .settings(commonSettings, releaseSettings)
+  .settings(commonSettings, releaseSettings, mimaSettings)
   .settings(
     name := "vault"
   )
@@ -24,6 +24,7 @@ lazy val docs = project.in(file("docs"))
 val catsV = "1.5.0"
 val catsEffectV = "1.1.0"
 val uniqueV = "0.1.1"
+val specs2V = "4.3.6"
 
 val kindProjectorV = "0.9.9"
 val betterMonadicForV = "0.3.0-M4"
@@ -32,16 +33,12 @@ lazy val contributors = Seq(
   "ChristopherDavenport" -> "Christopher Davenport"
 )
 
-// check for library updates whenever the project is [re]load
-onLoad in Global := { s =>
-  "dependencyUpdates" :: s
-}
 
 // General Settings
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
-  scalaVersion := "2.12.7",
+  scalaVersion := "2.12.8",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
   scalacOptions += "-Yrangepos",
 
@@ -51,8 +48,8 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "cats-core"                  % catsV,
     "org.typelevel"               %%% "cats-effect"                % catsEffectV,
     "io.chrisdavenport"           %%% "unique"                     % uniqueV,
-    "org.specs2"                  %%% "specs2-core"                % "4.3.6"     % Test,
-    "org.specs2"                  %%% "specs2-scalacheck"          % "4.3.6"     % Test
+    "org.specs2"                  %%% "specs2-core"                % specs2V    % Test,
+    "org.specs2"                  %%% "specs2-scalacheck"          % specs2V     % Test
   )
 )
 
@@ -126,7 +123,9 @@ lazy val mimaSettings = {
   import sbtrelease.Version
 
   def semverBinCompatVersions(major: Int, minor: Int, patch: Int): Set[(Int, Int, Int)] = {
-    val majorVersions: List[Int] = List(major)
+    val majorVersions: List[Int] = 
+      if (major == 0 && minor == 0) List.empty[Int]
+      else List(major)
     val minorVersions : List[Int] = 
       if (major >= 1) Range(0, minor).inclusive.toList
       else List(minor)
