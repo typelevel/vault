@@ -41,6 +41,11 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.8",
   crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
   scalacOptions += "-Yrangepos",
+  scalacOptions in (Compile, doc) ++= Seq(
+      "-groups",
+      "-sourcepath", (baseDirectory in LocalRootProject).value.getAbsolutePath,
+      "-doc-source-url", "https://github.com/ChristopherDavenport/vault/blob/v" + version.value + "€{FILE_PATH}.scala"
+  ),
 
   addCompilerPlugin("org.spire-math" % "kind-projector" % kindProjectorV cross CrossVersion.binary),
   addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
@@ -182,7 +187,7 @@ lazy val micrositeSettings = {
     micrositeGithubOwner := "ChristopherDavenport",
     micrositeGithubRepo := "vault",
     micrositeBaseUrl := "/vault",
-    micrositeDocumentationUrl := "https://christopherdavenport.github.io/vault",
+    micrositeDocumentationUrl := "https://www.javadoc.io/doc/io.chrisdavenport/vault_2.12",
     micrositeFooterText := None,
     micrositeHighlightTheme := "atom-one-light",
     micrositePalette := Map(
