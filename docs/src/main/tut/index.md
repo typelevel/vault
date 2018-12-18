@@ -51,6 +51,22 @@ val basicLookup = for {
 
 basicLookup.unsafeRunSync
 
+val lookupValuesOfDifferentTypes = for {
+  key1 <- Key.newKey[IO, Bar]
+  key2 <- Key.newKey[IO, String]
+  key3 <- Key.newKey[IO, String]
+} yield {
+  val myvault = Vaul.empty
+    .insert(key1, Bar("", 1, 2L))
+    .insert(key2, "I'm at Key2")
+    .insert(key3, "Key3 Reporting for Duty!")
+  
+  (myvault.lookup(key1), myvault.lookup(key2), myvault.lookup(key3))
+    .mapN((_,_,_))
+}
+
+lookupValuesOfDifferentTypes.unsafeRunSync
+
 val emptyLookup = for {
   key <- Key.newKey[IO, Bar]
 } yield {
