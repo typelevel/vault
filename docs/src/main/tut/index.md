@@ -56,7 +56,7 @@ val lookupValuesOfDifferentTypes = for {
   key2 <- Key.newKey[IO, String]
   key3 <- Key.newKey[IO, String]
 } yield {
-  val myvault = Vaul.empty
+  val myvault = Vault.empty
     .insert(key1, Bar("", 1, 2L))
     .insert(key2, "I'm at Key2")
     .insert(key3, "Key3 Reporting for Duty!")
