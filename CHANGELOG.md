@@ -16,6 +16,7 @@ Upgrades:
 
 - cats 1.6.0
 - cats-effect 1.2.0
+- unique 1.0.0
 
 ## <a name="0.1.0"></a>New and Noteworthy for Version 0.1.0
 
