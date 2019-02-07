@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val vault = project.in(file("."))
   .settings(commonSettings, releaseSettings, skipOnPublishSettings)
-  .aggregate(coreJVM, coreJS, docs)
+  .aggregate(coreJVM, coreJS)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
