@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 lazy val vault = project.in(file("."))
   .settings(commonSettings, releaseSettings, skipOnPublishSettings)
-  .aggregate(coreJVM, coreJS, docs)
+  .aggregate(coreJVM, coreJS)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -23,7 +23,7 @@ lazy val docs = project.in(file("docs"))
 
 val catsV = "1.6.0"
 val catsEffectV = "1.2.0"
-val uniqueV = "0.1.1"
+val uniqueV = "1.0.0-M1"
 val specs2V = "4.4.1"
 
 val kindProjectorV = "0.9.9"
@@ -39,7 +39,7 @@ lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq(scalaVersion.value, "2.11.12"),
+  crossScalaVersions := Seq("2.13.0-M5", scalaVersion.value, "2.11.12"),
   scalacOptions += "-Yrangepos",
   scalacOptions in (Compile, doc) ++= Seq(
       "-groups",
