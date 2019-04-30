@@ -38,6 +38,12 @@ class VaultSpec extends Specification with ScalaCheck {
       } yield Vault.empty.insert(key1, i).lookup(key2)
       test.unsafeRunSync must_=== None
     }
+    "be equal to an empty Vault, if it is empty too" >> {
+      val emptyVault1: Vault = Vault.empty
+      val emptyVault2: Vault = Vault.empty
+
+      emptyVault1 must_=== emptyVault2
+    }
   }
 
 }

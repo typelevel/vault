@@ -9,7 +9,7 @@ import io.chrisdavenport.unique.Unique
  * has no type information, all the type information is contained 
  * in the keys.
  */
-final class Vault private (private val m: Map[Unique, Locker]) {
+sealed abstract case class Vault private (private val m: Map[Unique, Locker]) {
   /**
     * Empty this Vault
     */
@@ -36,10 +36,14 @@ final class Vault private (private val m: Map[Unique, Locker]) {
   def ++(that: Vault): Vault = Vault.union(this, that)
 }
 object Vault {
+
+  private def newVault(m: Map[Unique, Locker]): Vault =
+    new Vault(m) {}
+
   /**
    * The Empty Vault 
    */
-  def empty = new Vault(Map.empty)
+  def empty = newVault(Map.empty)
 
   /**
    * Lookup the value of a key in the vault
@@ -51,13 +55,13 @@ object Vault {
    * Insert a value for a given key. Overwrites any previous value.
    */
   def insert[A](k: Key[A], a: A, v: Vault): Vault = 
-    new Vault(v.m + (k.unique -> Locker.lock(k, a)))
+    newVault(v.m + (k.unique -> Locker.lock(k, a)))
   
   /**
    * Delete a key from the vault
    */
   def delete[A](k: Key[A], v: Vault): Vault = 
-    new Vault(v.m - k.unique)
+    newVault(v.m - k.unique)
   
   /**
    * Adjust the value for a given key if it's present in the vault.
@@ -69,6 +73,6 @@ object Vault {
    * Merge Two Vaults. v2 is prioritized.
    */
   def union(v1: Vault, v2: Vault): Vault = 
-    new Vault(v1.m ++ v2.m)
+    newVault(v1.m ++ v2.m)
 
 }
