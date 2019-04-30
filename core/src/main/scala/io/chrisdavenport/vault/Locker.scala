@@ -12,7 +12,7 @@ import io.chrisdavenport.unique.Unique
  * know that the type MUST be the type of the Key, so we can
  * bring it back as that type safely.
  **/
-final class Locker private(private val unique: Unique, private val a: Any){
+sealed abstract case class Locker private(private val unique: Unique, private val a: Any){
   /**
    * Retrieve the value from the Locker. If the reference equality
    * instance backed by a `Unique` value is the same then allows
@@ -29,7 +29,7 @@ object Locker {
   /**
    * Put a single value into a Locker
    */
-  def lock[A](k: Key[A], a: A): Locker = new Locker(k.unique, a.asInstanceOf[Any])
+  def lock[A](k: Key[A], a: A): Locker = new Locker(k.unique, a.asInstanceOf[Any]) {}
 
   /**
    * Retrieve the value from the Locker. If the reference equality

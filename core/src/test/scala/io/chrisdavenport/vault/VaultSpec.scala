@@ -44,6 +44,18 @@ class VaultSpec extends Specification with ScalaCheck {
 
       emptyVault1 must_=== emptyVault2
     }
+    "be equal to an another Vault, if they contain the same elements" >> {
+      val key = Key.newKey[IO, Int].unsafeRunSync
+      val v1 = Vault.empty.insert(key, 1)
+      val v2 = Vault.empty.insert(key, 1)
+      v1 must_=== v2
+    }
+    "not be equal to an another Vault, if they contain different value under the same key" >> {
+      val key = Key.newKey[IO, Int].unsafeRunSync
+      val v1 = Vault.empty.insert(key, 1)
+      val v2 = Vault.empty.insert(key, 2)
+      v1 must_!== v2
+    }
   }
 
 }

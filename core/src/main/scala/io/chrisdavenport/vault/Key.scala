@@ -9,11 +9,11 @@ import io.chrisdavenport.unique.Unique
   * Since it can only be created as a result of that, it links
   * a Unique identifier to a type known by the compiler.
   */
-final class Key[A] private (private[vault] val unique: Unique)
+sealed abstract case class Key[A] private (private[vault] val unique: Unique)
 
 object Key {
   /**
    * Create A Typed Key
    */
-  def newKey[F[_]: Sync, A]: F[Key[A]] = Unique.newUnique[F].map(new Key[A](_))
+  def newKey[F[_]: Sync, A]: F[Key[A]] = Unique.newUnique[F].map(new Key[A](_){})
 }
