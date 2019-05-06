@@ -62,7 +62,7 @@
   <span class="o">(</span><span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key1</span><span class="o">),</span> <span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key2</span><span class="o">),</span> <span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key3</span><span class="o">))</span>
     <span class="o">.</span><span class="n">mapN</span><span class="o">((</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">))</span>
 <span class="o">}</span>
-<span class="c1">// lookupValuesOfDifferentTypes: cats.effect.IO[Option[(Bar, String, String)]] = IO$1406296304
+<span class="c1">// lookupValuesOfDifferentTypes: cats.effect.IO[Option[(Bar, String, String)]] = IO$721280566
 </span>
 <span class="n">lookupValuesOfDifferentTypes</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res4: Option[(Bar, String, String)] = Some((Bar(,1,2),I'm at Key2,Key3 Reporting for Duty!))
@@ -140,7 +140,7 @@ larger datastructure that a <code class="highlighter-rouge">vault</code> enables
   <span class="nc">Locker</span><span class="o">.</span><span class="n">lock</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
     <span class="o">.</span><span class="n">unlock</span><span class="o">(</span><span class="n">key2</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// wrongLockerExample: cats.effect.IO[Option[Bar]] = IO$717556826
+<span class="c1">// wrongLockerExample: cats.effect.IO[Option[Bar]] = IO$778009644
 </span>
 <span class="n">wrongLockerExample</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res10: Option[Bar] = None
