@@ -4,7 +4,7 @@ language: scala
 scala:
   - 2.12.8
   - 2.11.12
-  - 2.13.0-M5
+  - 2.13.0-RC1
 
 jdk:
   - oraclejdk8
@@ -20,8 +20,8 @@ install:
 
 script:
   - sbt ++$TRAVIS_SCALA_VERSION test
-  - test $TRAVIS_SCALA_VERSION == "2.13.0-M5" || sbt ++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues
-  - test $TRAVIS_SCALA_VERSION == "2.13.0-M5" || sbt ++$TRAVIS_SCALA_VERSION docs/makeMicrosite
+  - test $TRAVIS_SCALA_VERSION == "2.13.0-RC1" || sbt ++$TRAVIS_SCALA_VERSION mimaReportBinaryIssues
+  - test $TRAVIS_SCALA_VERSION == "2.13.0-RC1" || sbt ++$TRAVIS_SCALA_VERSION docs/makeMicrosite
 
 after_success:
 - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && test $TRAVIS_REPO_SLUG == "ChristopherDavenport/vault" && sbt ++$TRAVIS_SCALA_VERSION publish

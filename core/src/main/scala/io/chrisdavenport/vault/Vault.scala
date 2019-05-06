@@ -22,6 +22,11 @@ final class Vault private (private val m: Map[Unique, Locker]) {
     * Insert a value for a given key. Overwrites any previous value.
     */
   def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
+
+  /**
+   * Checks whether this Vault is empty
+   */
+  def isEmpty: Boolean = Vault.isEmpty(this)
   /**
     * Delete a key from the vault
     */
@@ -52,6 +57,12 @@ object Vault {
    */
   def insert[A](k: Key[A], a: A, v: Vault): Vault = 
     new Vault(v.m + (k.unique -> Locker.lock(k, a)))
+
+  /**
+   * Checks whether the given Vault is empty
+   */
+  def isEmpty(v: Vault): Boolean =
+    v.m.isEmpty
   
   /**
    * Delete a key from the vault
