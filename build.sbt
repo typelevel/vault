@@ -21,12 +21,12 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.0.0-M1"
-val catsEffectV = "2.0.0-M1"
-val uniqueV = "2.0.0-M1"
+val catsV = "2.0.0-M2"
+val catsEffectV = "2.0.0-M2"
+val uniqueV = "2.0.0-M2"
 val specs2V = "4.5.1"
 
-val kindProjectorV = "0.10.0"
+val kindProjectorV = "0.10.1"
 val betterMonadicForV = "0.3.0"
 
 lazy val contributors = Seq(
@@ -39,7 +39,7 @@ lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
   scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.13.0-RC1", scalaVersion.value, "2.11.12"),
+  crossScalaVersions := Seq("2.13.0-RC2", scalaVersion.value, "2.11.12"),
   scalacOptions += "-Yrangepos",
   scalacOptions in (Compile, doc) ++= Seq(
       "-groups",
