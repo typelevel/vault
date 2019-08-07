@@ -2,11 +2,12 @@ package io.chrisdavenport.vault
 
 import org.scalacheck._
 import cats.effect.IO
-import cats.tests.CatsSuite
+import org.specs2.mutable.Specification
+import org.typelevel.discipline.specs2.mutable.Discipline
 import cats.kernel.laws.discipline.{EqTests, HashTests}
 
 
-class UniqueTests extends CatsSuite {
+class UniqueTests extends Specification with Discipline {
 
   implicit def functionArbitrary[B, A: Arbitrary]: Arbitrary[B => A] = Arbitrary{
     for {
