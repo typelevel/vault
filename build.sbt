@@ -22,9 +22,10 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.0.0-M4"
-val catsEffectV = "2.0.0-M4"
-val uniqueV = "2.0.0-M2"
+val catsV = "2.0.0-RC1"
+val catsEffectV = "2.0.0-RC1"
+val uniqueV = "2.0.0-RC1"
+val disciplineSpecs2V = "1.0.0-RC1"
 val specs2V = "4.5.1"
 
 val kindProjectorV = "0.10.3"
@@ -39,8 +40,8 @@ lazy val contributors = Seq(
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
-  scalaVersion := "2.12.8",
-  crossScalaVersions := Seq("2.13.0", scalaVersion.value, "2.11.12"),
+  scalaVersion := "2.13.0",
+  crossScalaVersions := Seq(scalaVersion.value, "2.12.9"),
   scalacOptions += "-Yrangepos",
   scalacOptions in (Compile, doc) ++= Seq(
       "-groups",
@@ -55,7 +56,8 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "cats-core"                  % catsV,
     "org.typelevel"               %%% "cats-effect"                % catsEffectV,
     "io.chrisdavenport"           %%% "unique"                     % uniqueV,
-    "org.typelevel"               %%% "cats-testkit"               % catsV        % Test
+    "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,  
+    "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   )
 )
 
