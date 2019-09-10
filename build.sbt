@@ -22,8 +22,8 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.0.0-RC2"
-val catsEffectV = "2.0.0-RC2"
+val catsV = "2.0.0"
+val catsEffectV = "2.0.0"
 val uniqueV = "2.0.0-RC2"
 val disciplineSpecs2V = "1.0.0-RC1"
 val specs2V = "4.5.1"
@@ -63,25 +63,6 @@ lazy val commonSettings = Seq(
 
 lazy val releaseSettings = {
   Seq(
-    publishTo := {
-      val nexus = "https://oss.sonatype.org/"
-      if (isSnapshot.value)
-        Some("snapshots" at nexus + "content/repositories/snapshots")
-      else
-        Some("releases" at nexus + "service/local/staging/deploy/maven2")
-    },
-    credentials ++= (
-      for {
-        username <- Option(System.getenv().get("SONATYPE_USERNAME"))
-        password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
-      } yield
-        Credentials(
-          "Sonatype Nexus Repository Manager",
-          "oss.sonatype.org",
-          username,
-          password
-        )
-    ).toSeq,
     publishArtifact in Test := false,
     scmInfo := Some(
       ScmInfo(
