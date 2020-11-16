@@ -19,17 +19,20 @@ jobs:
     # stage="test" if no stage is specified
     -
       name: test 2.13
-      scala: 2.13.0
+      scala: 2.13.3
       script: sbt ++$TRAVIS_SCALA_VERSION test
     - name: test 2.12
-      scala: 2.12.9
+      scala: 2.12.12
+      script: sbt ++$TRAVIS_SCALA_VERSION test
+    - name: test 3.0.0-M1
+      scala: 3.0.0-M1
       script: sbt ++$TRAVIS_SCALA_VERSION test
     -
       name: mima
       script: sbt +mimaReportBinaryIssues
     -
       name: docs
-      scala: 2.12.9
+      scala: 2.12.12
       install:
         - rvm use 2.6.0 --install --fuzzy
         - gem update --system
@@ -43,7 +46,7 @@ jobs:
         - sbt ci-release
     - stage: release
       name: microsite
-      scala: 2.12.9
+      scala: 2.12.12
       install:
         - rvm use 2.6.0 --install --fuzzy
         - gem update --system

@@ -7,16 +7,16 @@ import org.typelevel.discipline.specs2.mutable.Discipline
 import cats.kernel.laws.discipline.{EqTests, HashTests}
 
 
-class UniqueTests extends Specification with Discipline {
+class KeyTests extends Specification with Discipline {
 
   implicit def functionArbitrary[B, A: Arbitrary]: Arbitrary[B => A] = Arbitrary{
     for {
       a <- Arbitrary.arbitrary[A]
-    } yield {_: B => a}
+    } yield { (_: B) => a }
   }
 
   implicit def uniqueKey[A]: Arbitrary[Key[A]] = Arbitrary{
-    Arbitrary.arbitrary[Unit].map(_ => Key.newKey[IO, A].unsafeRunSync)
+    Arbitrary.arbitrary[Unit].map(_ => Key.newKey[IO, A].unsafeRunSync())
   }
 
 
