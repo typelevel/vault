@@ -27,9 +27,9 @@ jobs:
     - name: test 3.0.0-M1
       scala: 3.0.0-M1
       script: sbt ++$TRAVIS_SCALA_VERSION test
-    -
-      name: mima
-      script: sbt +mimaReportBinaryIssues
+    #-
+    #  name: mima
+    #  script: sbt +mimaReportBinaryIssues
     -
       name: docs
       scala: 2.12.12
