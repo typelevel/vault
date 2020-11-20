@@ -26,7 +26,7 @@ lazy val docs = project.in(file("docs"))
 
 val catsV = "2.3.0-M2"
 val catsEffectV = "2.3.0-M1"
-val uniqueV = "2.0.0+103-31b24adc-SNAPSHOT"
+val uniqueV = "2.1.0-M2"
 val disciplineSpecs2V = "1.1.1"
 val specs2V = "4.5.1"
 
