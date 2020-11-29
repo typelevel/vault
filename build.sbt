@@ -13,7 +13,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
     name := "vault"
   )
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
-  .jsSettings(crossScalaVersions := crossScalaVersions.value.filter(_.startsWith("2.")))
+  .jsSettings(crossScalaVersions := crossScalaVersions.value.filterNot(_.startsWith("3.0.0-M1")))
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
@@ -24,9 +24,9 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.3.0-M2"
-val catsEffectV = "2.3.0-M1"
-val uniqueV = "2.1.0-M2"
+val catsV = "2.3.0"
+val catsEffectV = "2.3.0"
+val uniqueV = "2.1.0-M3"
 val disciplineSpecs2V = "1.1.2"
 val specs2V = "4.5.1"
 
@@ -43,7 +43,7 @@ lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
   scalaVersion := "2.13.3",
-  crossScalaVersions := Seq("3.0.0-M1", scalaVersion.value, "2.12.12"),
+  crossScalaVersions := Seq("3.0.0-M2", "3.0.0-M1", scalaVersion.value, "2.12.12"),
   scalacOptions ++= {
     if (isDotty.value) Seq("-source:3.0-migration")
     else Seq("-Yrangepos")
