@@ -30,7 +30,7 @@ val uniqueV = "2.1.0-M2"
 val disciplineSpecs2V = "1.1.2"
 val specs2V = "4.5.1"
 
-val kindProjectorV = "0.11.1"
+val kindProjectorV = "0.11.2"
 val betterMonadicForV = "0.3.1"
 
 lazy val contributors = Seq(
