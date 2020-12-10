@@ -33,7 +33,7 @@ import cats.effect._
 import cats.implicits._
 import io.chrisdavenport.vault._
 
-// Importing global cats-effect runtime for to allow .unsafeRunSync; 
+// Importing global cats-effect runtime to allow .unsafeRunSync; 
 // In real code you should follow cats-effect advice on obtaining a runtime
 import cats.effect.unsafe.implicits.global
 ```
