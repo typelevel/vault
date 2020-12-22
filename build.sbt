@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 val Scala212 = "2.12.12"
 
-ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3")
+ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3", "3.0.0-M1")
 ThisBuild / scalaVersion := crossScalaVersions.value.last
 
 val Scala212Cond = s"matrix.scala == '$Scala212'"
@@ -66,6 +66,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   .settings(
     name := "vault"
   )
+  .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
+  .jsSettings(crossScalaVersions := crossScalaVersions.value.filter(_.startsWith("2.")))
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
@@ -76,13 +78,13 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.0.0"
-val catsEffectV = "2.1.4"
-val uniqueV = "2.0.0"
-val disciplineSpecs2V = "1.0.0"
+val catsV = "2.3.1"
+val catsEffectV = "2.3.1"
+val uniqueV = "2.1.0-M2"
+val disciplineSpecs2V = "1.1.2"
 val specs2V = "4.5.1"
 
-val kindProjectorV = "0.10.3"
+val kindProjectorV = "0.11.2"
 val betterMonadicForV = "0.3.1"
 
 lazy val contributors = Seq(
@@ -94,7 +96,10 @@ lazy val contributors = Seq(
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
 
-  scalacOptions += "-Yrangepos",
+  scalacOptions ++= {
+    if (isDotty.value) Seq("-source:3.0-migration")
+    else Seq("-Yrangepos")
+  },
   scalacOptions in (Compile, doc) ++= Seq(
       "-groups",
       "-sourcepath", (baseDirectory in LocalRootProject).value.getAbsolutePath,
@@ -103,15 +108,27 @@ lazy val commonSettings = Seq(
   resolvers += Resolver.sonatypeRepo("releases"),
   scalacOptions in (Compile, doc) -= "-Xfatal-warnings",
 
-  addCompilerPlugin("org.typelevel" % "kind-projector" % kindProjectorV cross CrossVersion.binary),
-  addCompilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
+  libraryDependencies ++= {
+    if (isDotty.value) Seq.empty
+    else Seq(
+      compilerPlugin("org.typelevel" % "kind-projector" % kindProjectorV cross CrossVersion.full),
+      compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
+    )
+  },
   libraryDependencies ++= Seq(
     "org.typelevel"               %%% "cats-core"                  % catsV,
     "org.typelevel"               %%% "cats-effect"                % catsEffectV,
     "io.chrisdavenport"           %%% "unique"                     % uniqueV,
     "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
-  )
+  ),
+  Compile / doc / sources := {
+    val old = (Compile / doc / sources).value
+    if (isDotty.value)
+      Seq()
+    else
+      old
+  }
 )
 
 lazy val releaseSettings = {

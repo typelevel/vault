@@ -23,7 +23,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12, 2.13.3]
+        scala: [2.12.12, 2.13.3, 3.0.0-M1]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -97,7 +97,7 @@ jobs:
         run: sbt ++${{ matrix.scala }} docs/makeMicrosite
 
       - name: Compress target directories
-        run: tar cf targets.tar target docs/target core/.js/target core/.jvm/target project/target
+        run: tar cf targets.tar target core/.js/target core/.jvm/target docs/target project/target
 
       - name: Upload target directories
         uses: actions/upload-artifact@v2
@@ -112,7 +112,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.13.3]
+        scala: [3.0.0-M1]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -181,6 +181,16 @@ jobs:
           name: target-${{ matrix.os }}-2.13.3-${{ matrix.java }}
 
       - name: Inflate target directories (2.13.3)
+        run: |
+          tar xf targets.tar
+          rm targets.tar
+
+      - name: Download target directories (3.0.0-M1)
+        uses: actions/download-artifact@v2
+        with:
+          name: target-${{ matrix.os }}-3.0.0-M1-${{ matrix.java }}
+
+      - name: Inflate target directories (3.0.0-M1)
         run: |
           tar xf targets.tar
           rm targets.tar
