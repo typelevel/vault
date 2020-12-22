@@ -1,7 +1,7 @@
 package io.chrisdavenport.vault
 
 import org.scalacheck._
-import cats.effect.IO
+import cats.effect.SyncIO
 import org.specs2.mutable.Specification
 import org.typelevel.discipline.specs2.mutable.Discipline
 import cats.kernel.laws.discipline.{EqTests, HashTests}
@@ -16,7 +16,7 @@ class KeyTests extends Specification with Discipline {
   }
 
   implicit def uniqueKey[A]: Arbitrary[Key[A]] = Arbitrary{
-    Arbitrary.arbitrary[Unit].map(_ => Key.newKey[IO, A].unsafeRunSync())
+    Arbitrary.arbitrary[Unit].map(_ => Key.newKey[SyncIO, A].unsafeRunSync())
   }
 
 

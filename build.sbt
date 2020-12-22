@@ -24,9 +24,9 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.3.0-M2"
-val catsEffectV = "2.3.0-M1"
-val uniqueV = "2.1.0-M2"
+val catsV = "2.3.0"
+val catsEffectV = "3.0.0-M4"
+val uniqueV = "2.1.0-M5"
 val disciplineSpecs2V = "1.1.2"
 val specs2V = "4.5.1"
 
@@ -193,7 +193,7 @@ lazy val micrositeSettings = {
       "-Ywarn-unused:imports",
       "-Xlint:-missing-interpolator,_"
     ),
-    libraryDependencies += "com.47deg" %% "github4s" % "0.20.0",
+    libraryDependencies += "com.47deg" %% "github4s" % "0.27.1",
     micrositePushSiteWith := GitHub4s,
     micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),
     micrositeExtraMdFiles := Map(
