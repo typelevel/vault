@@ -166,10 +166,9 @@ jobs:
       - name: Publish artifacts to Sonatype
         env:
           PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          PGP_SECRET: ${{ secrets.PGP_SECRET }}
           SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        run: sbt ++${{ matrix.scala }} ci-release
+        run: sbt ++${{ matrix.scala }} release
 
       - name: Publish microsite
         run: sbt ++${{ matrix.scala }} ++2.12.12 docs/publishMicrosite
