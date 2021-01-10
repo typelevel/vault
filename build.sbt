@@ -103,7 +103,7 @@ lazy val commonSettings = Seq(
   scalacOptions in (Compile, doc) ++= Seq(
       "-groups",
       "-sourcepath", (baseDirectory in LocalRootProject).value.getAbsolutePath,
-      "-doc-source-url", "https://github.com/ChristopherDavenport/vault/blob/v" + version.value + "€{FILE_PATH}.scala"
+      "-doc-source-url", "https://github.com/typelevel/vault/blob/v" + version.value + "€{FILE_PATH}.scala"
   ),
   resolvers += Resolver.sonatypeRepo("releases"),
   scalacOptions in (Compile, doc) -= "-Xfatal-warnings",
@@ -136,12 +136,12 @@ lazy val releaseSettings = {
     publishArtifact in Test := false,
     scmInfo := Some(
       ScmInfo(
-        url("https://github.com/ChristopherDavenport/vault"),
-        "git@github.com:ChristopherDavenport/vault.git"
+        url("https://github.com/typelevel/vault"),
+        "git@github.com:typelevel/vault.git"
       )
     ),
-    homepage := Some(url("https://github.com/ChristopherDavenport/vault")),
-    licenses += ("MIT", url("http://opensource.org/licenses/MIT")),
+    homepage := Some(url("https://github.com/typelevel/vault")),
+    licenses := List("MIT" -> url("http://opensource.org/licenses/MIT")),
     publishMavenStyle := true,
     pomIncludeRepository := { _ =>
       false
@@ -219,11 +219,11 @@ lazy val micrositeSettings = {
   Seq(
     micrositeName := "vault",
     micrositeDescription := "Type-safe, persistent storage for values of arbitrary types",
-    micrositeAuthor := "Christopher Davenport",
-    micrositeGithubOwner := "ChristopherDavenport",
+    micrositeAuthor := "Typelevel",
+    micrositeGithubOwner := "typelevel",
     micrositeGithubRepo := "vault",
     micrositeBaseUrl := "/vault",
-    micrositeDocumentationUrl := "https://www.javadoc.io/doc/io.chrisdavenport/vault_2.12",
+    micrositeDocumentationUrl := "https://www.javadoc.io/doc/typelevel/vault_2.13",
     micrositeFooterText := None,
     micrositeHighlightTheme := "atom-one-light",
     micrositePalette := Map(
