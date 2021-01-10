@@ -21,7 +21,7 @@
 
 package org.typelevel.vault
 
-import io.chrisdavenport.unique.Unique
+import org.typelevel.unique.Unique
 /**
  * Vault - A persistent store for values of arbitrary types.
  * This extends the behavior of the locker, into a Map

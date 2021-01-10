@@ -22,7 +22,7 @@
 package org.typelevel.vault
 
 import cats.implicits._
-import io.chrisdavenport.unique.Unique
+import org.typelevel.unique.Unique
 
 /**
  * Locker - A persistent store for a single value.

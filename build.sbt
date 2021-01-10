@@ -96,8 +96,8 @@ lazy val docs = project.in(file("docs"))
 
 val catsV = "2.3.1"
 val catsEffectV = "2.3.1"
-val uniqueV = "2.1.0-M2"
-val disciplineSpecs2V = "1.1.2"
+val uniqueV = "2.1.0-M10"
+val disciplineSpecs2V = "1.1.3"
 val specs2V = "4.5.1"
 
 // General Settings
@@ -106,7 +106,7 @@ lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
     "org.typelevel"               %%% "cats-core"                  % catsV,
     "org.typelevel"               %%% "cats-effect"                % catsEffectV,
-    "io.chrisdavenport"           %%% "unique"                     % uniqueV,
+    "org.typelevel"               %%% "unique"                     % uniqueV,
     "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   ),
