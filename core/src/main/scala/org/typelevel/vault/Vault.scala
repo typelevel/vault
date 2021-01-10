@@ -1,4 +1,4 @@
-package io.chrisdavenport.vault
+package org.typelevel.vault
 
 import io.chrisdavenport.unique.Unique
 /**

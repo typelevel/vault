@@ -1,4 +1,4 @@
-package io.chrisdavenport.vault
+package org.typelevel.vault
 
 import cats.effect.Sync
 import cats.Hash

@@ -1,4 +1,4 @@
-package io.chrisdavenport.vault
+package org.typelevel.vault
 
 import cats.effect._
 import org.specs2.mutable.Specification

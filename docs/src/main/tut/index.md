@@ -31,7 +31,7 @@ First the imports
 ```tut:silent
 import cats.effect._
 import cats.implicits._
-import io.chrisdavenport.vault._
+import org.typelevel.vault._
 ```
 
 Then some basic operations

@@ -1,4 +1,4 @@
-package io.chrisdavenport.vault
+package org.typelevel.vault
 
 import cats.implicits._
 import io.chrisdavenport.unique.Unique
