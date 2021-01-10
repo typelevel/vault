@@ -2,8 +2,19 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 val Scala212 = "2.12.12"
 
+ThisBuild / baseVersion := "2.1"
 ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3", "3.0.0-M2", "3.0.0-M3")
 ThisBuild / scalaVersion := crossScalaVersions.value.filter(_.startsWith("2.")).last
+ThisBuild / publishFullName := "Christopher Davenport"
+ThisBuild / publishGithubUser := "christopherdavenport"
+
+ThisBuild / versionIntroduced := Map(
+  // First versions after the Typelevel move
+  "2.12" -> "2.1.0",
+  "2.13" -> "2.1.0",
+  "3.0.0-M2" -> "2.1.0",
+  "3.0.0-M3" -> "2.1.0",
+)
 
 val Scala212Cond = s"matrix.scala == '$Scala212'"
 
@@ -55,25 +66,30 @@ ThisBuild / githubWorkflowPublish := Seq(
     name = Some("Publish microsite")))
 
 lazy val vault = project.in(file("."))
-  .disablePlugins(MimaPlugin)
-  .settings(commonSettings, releaseSettings, skipOnPublishSettings)
+  .disablePlugins(MimaPlugin, NoPublishPlugin)
+  .settings(commonSettings, releaseSettings)
   .aggregate(coreJVM, coreJS)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
-  .settings(commonSettings, releaseSettings, mimaSettings)
+  .settings(commonSettings, releaseSettings)
   .settings(
     name := "vault"
   )
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
-  .jsSettings(crossScalaVersions := crossScalaVersions.value.filter(_.startsWith("2.")))
 
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
 lazy val docs = project.in(file("docs"))
-  .settings(commonSettings, releaseSettings, skipOnPublishSettings, micrositeSettings)
+  .settings(
+    commonSettings,
+    releaseSettings,
+    micrositeSettings,
+    publish / skip := true,
+    githubWorkflowArtifactUpload := false
+  )
   .dependsOn(coreJVM)
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
@@ -84,37 +100,9 @@ val uniqueV = "2.1.0-M2"
 val disciplineSpecs2V = "1.1.2"
 val specs2V = "4.5.1"
 
-val kindProjectorV = "0.11.2"
-val betterMonadicForV = "0.3.1"
-
-lazy val contributors = Seq(
-  "ChristopherDavenport" -> "Christopher Davenport"
-)
-
-
 // General Settings
 lazy val commonSettings = Seq(
   organization := "io.chrisdavenport",
-
-  scalacOptions ++= {
-    if (isDotty.value) Seq("-source:3.0-migration")
-    else Seq("-Yrangepos")
-  },
-  scalacOptions in (Compile, doc) ++= Seq(
-      "-groups",
-      "-sourcepath", (baseDirectory in LocalRootProject).value.getAbsolutePath,
-      "-doc-source-url", "https://github.com/typelevel/vault/blob/v" + version.value + "€{FILE_PATH}.scala"
-  ),
-  resolvers += Resolver.sonatypeRepo("releases"),
-  scalacOptions in (Compile, doc) -= "-Xfatal-warnings",
-
-  libraryDependencies ++= {
-    if (isDotty.value) Seq.empty
-    else Seq(
-      compilerPlugin("org.typelevel" % "kind-projector" % kindProjectorV cross CrossVersion.full),
-      compilerPlugin("com.olegpy" %% "better-monadic-for" % betterMonadicForV),
-    )
-  },
   libraryDependencies ++= Seq(
     "org.typelevel"               %%% "cats-core"                  % catsV,
     "org.typelevel"               %%% "cats-effect"                % catsEffectV,
@@ -122,13 +110,6 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   ),
-  Compile / doc / sources := {
-    val old = (Compile / doc / sources).value
-    if (isDotty.value)
-      Seq()
-    else
-      old
-  }
 )
 
 lazy val releaseSettings = {
@@ -142,75 +123,6 @@ lazy val releaseSettings = {
     ),
     homepage := Some(url("https://github.com/typelevel/vault")),
     licenses := List("MIT" -> url("http://opensource.org/licenses/MIT")),
-    publishMavenStyle := true,
-    pomIncludeRepository := { _ =>
-      false
-    },
-    pomExtra := {
-      <developers>
-        {for ((username, name) <- contributors) yield
-        <developer>
-          <id>{username}</id>
-          <name>{name}</name>
-          <url>http://github.com/{username}</url>
-        </developer>
-        }
-      </developers>
-    }
-  )
-}
-
-lazy val mimaSettings = {
-
-  def semverBinCompatVersions(major: Int, minor: Int, patch: Int): Set[(Int, Int, Int)] = {
-    val majorVersions: List[Int] =
-      if (major == 0 && minor == 0) List.empty[Int]
-      else List(major)
-    val minorVersions : List[Int] =
-      if (major >= 1) Range(0, minor).inclusive.toList
-      else List(minor)
-    def patchVersions(currentMinVersion: Int): List[Int] =
-      if (minor == 0 && patch == 0) List.empty[Int]
-      else if (currentMinVersion != minor) List(0)
-      else Range(0, patch - 1).inclusive.toList
-
-    val versions = for {
-      maj <- majorVersions
-      min <- minorVersions
-      pat <- patchVersions(min)
-    } yield (maj, min, pat)
-    versions.toSet
-  }
-
-  def mimaVersions(version: String): Set[String] = {
-    VersionNumber(version) match {
-      case VersionNumber(Seq(major, minor, patch, _*), _, _) if patch.toInt > 0 =>
-        semverBinCompatVersions(major.toInt, minor.toInt, patch.toInt)
-          .map{case (maj, min, pat) => maj.toString + "." + min.toString + "." + pat.toString}
-      case _ =>
-        Set.empty[String]
-    }
-  }
-  // Safety Net For Exclusions
-  lazy val excludedVersions: Set[String] = Set()
-
-  // Safety Net for Inclusions
-  lazy val extraVersions: Set[String] = Set()
-
-  Seq(
-    mimaFailOnNoPrevious := false,
-    mimaFailOnProblem := mimaVersions(version.value).toList.headOption.isDefined,
-    mimaPreviousArtifacts := (mimaVersions(version.value) ++ extraVersions)
-      .filterNot(excludedVersions.contains(_))
-      .map{v =>
-        val moduleN = moduleName.value + "_" + scalaBinaryVersion.value.toString
-        organization.value % moduleN % v
-      },
-    mimaBinaryIssueFilters ++= {
-      import com.typesafe.tools.mima.core._
-      import com.typesafe.tools.mima.core.ProblemFilters._
-      Seq()
-    }
   )
 }
 
@@ -255,11 +167,3 @@ lazy val micrositeSettings = {
     )
   )
 }
-
-lazy val skipOnPublishSettings = Seq(
-  skip in publish := true,
-  publish := (()),
-  publishLocal := (()),
-  publishArtifact := false,
-  publishTo := None
-)
