@@ -160,4 +160,4 @@ jobs:
       - run: sbt ++${{ matrix.scala }} release
 
       - name: Publish microsite
-        run: sbt ++${{ matrix.scala }} docs/publishMicrosite
+        run: sbt ++${{ matrix.scala }} ++2.12.12 docs/publishMicrosite
