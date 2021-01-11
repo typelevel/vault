@@ -159,13 +159,5 @@ jobs:
 
       - run: sbt ++${{ matrix.scala }} release
 
-      - run: |
-          eval "$(ssh-agent -s)"
-          echo "$SSH_PRIVATE_KEY" | ssh-add -
-          git config --global user.name "GitHub Actions CI"
-          git config --global user.email "ghactions@invalid"
-
       - name: Publish microsite
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
         run: sbt ++${{ matrix.scala }} docs/publishMicrosite
