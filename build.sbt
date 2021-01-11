@@ -52,21 +52,18 @@ ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
-ThisBuild / githubWorkflowPublishPreamble ++=
-  WorkflowStep.Use("olafurpg", "setup-gpg", "v3") +: rubySetupSteps(None)
-
 ThisBuild / githubWorkflowPublish := Seq(
-  WorkflowStep.Sbt(
-    List("release"),
-    name = Some("Publish artifacts to Sonatype"),
-    env = Map(
-      "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
-      "SONATYPE_PASSWORD" -> "${{ secrets.SONATYPE_PASSWORD }}",
-      "SONATYPE_USERNAME" -> "${{ secrets.SONATYPE_USERNAME }}")),
-
-  WorkflowStep.Sbt(
-    List(s"++$Scala212", "docs/publishMicrosite"),
-    name = Some("Publish microsite")))
+  WorkflowStep.Sbt(List("release")),
+  WorkflowStep.Run(List(
+    """eval "$(ssh-agent -s)"""",
+    """echo "$SSH_PRIVATE_KEY" | ssh-add -""",
+    """git config --global user.name "GitHub Actions CI"""",
+    """git config --global user.email "ghactions@invalid""""
+  )),
+  WorkflowStep.Sbt(List("docs/publishMicrosite"),
+    name = Some(s"Publish microsite"),
+    env = Map("SSH_PRIVATE_KEY" -> "${{ secrets.SSH_PRIVATE_KEY }}"))
+)
 
 lazy val vault = project.in(file("."))
   .disablePlugins(NoPublishPlugin)
