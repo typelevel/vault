@@ -16,6 +16,10 @@ ThisBuild / versionIntroduced := Map(
   "3.0.0-M3" -> "2.1.0",
 )
 
+ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
+
+enablePlugins(SonatypeCiReleasePlugin)
+
 val Scala212Cond = s"matrix.scala == '$Scala212'"
 
 def rubySetupSteps(cond: Option[String]) = Seq(
@@ -65,7 +69,7 @@ ThisBuild / githubWorkflowPublish := Seq(
     name = Some("Publish microsite")))
 
 lazy val vault = project.in(file("."))
-  .disablePlugins(MimaPlugin, NoPublishPlugin)
+  .disablePlugins(NoPublishPlugin)
   .settings(commonSettings, releaseSettings)
   .aggregate(coreJVM, coreJS)
 
