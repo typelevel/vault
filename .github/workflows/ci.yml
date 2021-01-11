@@ -157,6 +157,16 @@ jobs:
       - name: Import signing key
         run: echo $PGP_SECRET | base64 -d | gpg --import
 
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6.0
+
+      - name: Install microsite dependencies
+        run: |
+          gem install saas
+          gem install jekyll -v 3.2.1
+
       - run: sbt ++${{ matrix.scala }} release
 
       - name: Publish microsite

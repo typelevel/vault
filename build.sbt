@@ -52,6 +52,9 @@ ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
+ThisBuild / githubWorkflowPublishPreamble ++=
+  rubySetupSteps(None)
+
 ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(List("release")),
   WorkflowStep.Sbt(List(s"++${Scala212}", "docs/publishMicrosite"),
