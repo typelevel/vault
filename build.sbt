@@ -110,6 +110,8 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   ),
+  // As of 3.0.0-M3, it's still broken
+  useScala3doc := false
 )
 
 lazy val releaseSettings = {
