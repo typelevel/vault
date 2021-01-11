@@ -157,24 +157,15 @@ jobs:
       - name: Import signing key
         run: echo $PGP_SECRET | base64 -d | gpg --import
 
-      - uses: olafurpg/setup-gpg@v3
+      - run: sbt ++${{ matrix.scala }} release
 
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.6.0
-
-      - name: Install microsite dependencies
-        run: |
-          gem install saas
-          gem install jekyll -v 3.2.1
-
-      - name: Publish artifacts to Sonatype
-        env:
-          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-        run: sbt ++${{ matrix.scala }} release
+      - run: |
+          eval "$(ssh-agent -s)"
+          echo "$SSH_PRIVATE_KEY" | ssh-add -
+          git config --global user.name "GitHub Actions CI"
+          git config --global user.email "ghactions@invalid"
 
       - name: Publish microsite
-        run: sbt ++${{ matrix.scala }} ++2.12.12 docs/publishMicrosite
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: sbt ++${{ matrix.scala }} docs/publishMicrosite
