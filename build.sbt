@@ -11,7 +11,7 @@ val Scala212Cond = s"matrix.scala == '$Scala212'"
 
 def rubySetupSteps(cond: Option[String]) = Seq(
   WorkflowStep.Use(
-    "ruby", "setup-ruby", "v1",
+    UseRef.Public("ruby", "setup-ruby", "v1"),
     name = Some("Setup Ruby"),
     params = Map("ruby-version" -> "2.6.0"),
     cond = cond),
@@ -40,7 +40,7 @@ ThisBuild / githubWorkflowPublishTargetBranches :=
   Seq(RefPredicate.StartsWith(Ref.Tag("v")))
 
 ThisBuild / githubWorkflowPublishPreamble ++=
-  WorkflowStep.Use("olafurpg", "setup-gpg", "v3") +: rubySetupSteps(None)
+  WorkflowStep.Use(UseRef.Public("olafurpg", "setup-gpg", "v3")) +: rubySetupSteps(None)
 
 ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(
