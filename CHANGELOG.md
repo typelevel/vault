@@ -6,6 +6,17 @@ This file summarizes **notable** changes for each release, but does not describe
 
 ## <a name="Unreleased"></a>Unreleased Changes
 
+## <a name="3.0.0-M1"></a>New and Noteworthy for Version 3.0.0-M1
+
+* Built for cats-effect-3.0.0-M5
+* Internal, private copy of Unique
+
+## <a name="2.1.0-M2"></a>New and Noteworthy for Version 2.1.0-M2
+
+* Now publishes under `org.typelevel`
+* Package renamed to `org.typelevel.vault`
+* Support for Dotty 3.0.0-M2 and 3.0.0-M3
+
 ## <a name="1.0.0"></a>New and Noteworthy for Version 1.0.0
 
 Stable Release of `vault`. This library will maintain binary compatibility moving forward for the forseeable future.
