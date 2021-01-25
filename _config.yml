@@ -6,6 +6,6 @@ docs: true
 collections:
   tut:
     output: true
-version: 2.1.0-M14
+version: 3.0.0-M1
 org: Christopher Davenport
 markdown: kramdown
