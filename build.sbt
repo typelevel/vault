@@ -64,7 +64,7 @@ ThisBuild / githubWorkflowPublish := Seq(
 )
 
 lazy val vault = project.in(file("."))
-  .enablePlugin(NoPublishPlugin)
+  .enablePlugins(NoPublishPlugin)
   .settings(commonSettings, releaseSettings)
   .aggregate(coreJVM, coreJS)
 
