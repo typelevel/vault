@@ -22,6 +22,7 @@
 package org.typelevel.vault
 
 import cats.implicits._
+import cats.effect.kernel.Unique
 
 /**
  * Locker - A persistent store for a single value.
@@ -32,7 +33,7 @@ import cats.implicits._
  * know that the type MUST be the type of the Key, so we can
  * bring it back as that type safely.
  **/
-final class Locker private(private val unique: Unique, private val a: Any){
+final class Locker private(private val unique: Unique.Token, private val a: Any){
   /**
    * Retrieve the value from the Locker. If the reference equality
    * instance backed by a `Unique` value is the same then allows

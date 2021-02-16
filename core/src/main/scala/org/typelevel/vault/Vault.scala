@@ -21,6 +21,8 @@
 
 package org.typelevel.vault
 
+import cats.effect.kernel.Unique
+
 /**
  * Vault - A persistent store for values of arbitrary types.
  * This extends the behavior of the locker, into a Map
@@ -29,7 +31,7 @@ package org.typelevel.vault
  * has no type information, all the type information is contained 
  * in the keys.
  */
-final class Vault private (private val m: Map[Unique, Locker]) {
+final class Vault private (private val m: Map[Unique.Token, Locker]) {
   /**
     * Empty this Vault
     */
