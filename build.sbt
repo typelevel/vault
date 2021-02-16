@@ -88,7 +88,7 @@ lazy val docs = project.in(file("docs"))
   )
   .dependsOn(coreJVM)
   .enablePlugins(MicrositesPlugin)
-  .enablePlugins(TutPlugin)
+  .enablePlugins(MdocPlugin)
 
 val catsV = "2.4.1"
 val catsEffectV = "2.3.1"
@@ -127,6 +127,7 @@ lazy val releaseSettings = {
 lazy val micrositeSettings = {
   import microsites._
   Seq(
+    mdocIn := sourceDirectory.value / "main" / "mdoc",
     micrositeName := "vault",
     micrositeDescription := "Type-safe, persistent storage for values of arbitrary types",
     micrositeAuthor := "Typelevel",
@@ -145,15 +146,6 @@ lazy val micrositeSettings = {
       "gray-light" -> "#E5E5E6",
       "gray-lighter" -> "#F4F3F4",
       "white-color" -> "#FFFFFF"
-    ),
-    fork in tut := true,
-    scalacOptions in Tut --= Seq(
-      "-Xfatal-warnings",
-      "-Ywarn-unused-import",
-      "-Ywarn-numeric-widen",
-      "-Ywarn-dead-code",
-      "-Ywarn-unused:imports",
-      "-Xlint:-missing-interpolator,_"
     ),
     libraryDependencies += "com.47deg" %% "github4s" % "0.20.0",
     micrositePushSiteWith := GitHub4s,
