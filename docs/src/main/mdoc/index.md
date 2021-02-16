@@ -28,7 +28,7 @@ libraryDependencies ++= Seq(
 
 First the imports
 
-```tut:silent
+```scala mdoc:silent
 import cats.effect._
 import cats.implicits._
 import org.typelevel.vault._
@@ -36,7 +36,7 @@ import org.typelevel.vault._
 
 Then some basic operations
 
-```tut:book
+```scala mdoc
 case class Bar(a: String, b: Int, c: Long)
 
 // Creating keys are effects, but interacting with the vault
@@ -114,7 +114,7 @@ deletedKeyIsMissing.unsafeRunSync
 We can also interact with a single value `locker` instead of the
 larger datastructure that a `vault` enables.
 
-```tut:book
+```scala mdoc
 val lockerExample = for {
   key <- Key.newKey[IO, Bar]
 } yield {
