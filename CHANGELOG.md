@@ -6,6 +6,11 @@ This file summarizes **notable** changes for each release, but does not describe
 
 ## <a name="Unreleased"></a>Unreleased Changes
 
+## <a name="3.0.0-RC1"></a>New and Noteworthy for Version 3.0.0-RC1
+
+* Built for cats-effect-3.0.0-RC1
+* Uses Cats-Effect-3's `Unique` instead of our internal one
+
 ## <a name="3.0.0-M1"></a>New and Noteworthy for Version 3.0.0-M1
 
 * Built for cats-effect-3.0.0-M5
