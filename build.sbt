@@ -1,9 +1,9 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-val Scala212 = "2.12.12"
+val Scala212 = "2.12.13"
 
 ThisBuild / baseVersion := "2.1"
-ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3", "3.0.0-M2", "3.0.0-M3")
+ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.4", "3.0.0-M2", "3.0.0-M3")
 ThisBuild / scalaVersion := crossScalaVersions.value.filter(_.startsWith("2.")).last
 ThisBuild / publishFullName := "Christopher Davenport"
 ThisBuild / publishGithubUser := "christopherdavenport"
@@ -90,7 +90,7 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.3.1"
+val catsV = "2.4.1"
 val catsEffectV = "2.3.1"
 val uniqueV = "2.1.0-M10"
 val disciplineSpecs2V = "1.1.3"
