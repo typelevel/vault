@@ -21,7 +21,7 @@
 
 package org.typelevel.vault
 
-import cats.effect.Sync
+import cats.Functor
 import cats.effect.kernel.Unique
 import cats.Hash
 import cats.implicits._
@@ -39,7 +39,7 @@ object Key {
   /**
    * Create A Typed Key
    */
-  def newKey[F[_]: Sync, A]: F[Key[A]] = Sync[F].unique.map(new Key[A](_))
+  def newKey[F[_]: Functor: Unique, A]: F[Key[A]] = Unique[F].unique.map(new Key[A](_))
 
   implicit def keyInstances[A]: Hash[Key[A]] = new Hash[Key[A]]{
     // Members declared in cats.kernel.Eq
