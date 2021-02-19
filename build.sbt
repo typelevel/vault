@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 val Scala212 = "2.12.13"
 
 ThisBuild / baseVersion := "2.1"
-ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.4", "3.0.0-M2", "3.0.0-M3")
+ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.4", "3.0.0-M3", "3.0.0-RC1")
 ThisBuild / scalaVersion := crossScalaVersions.value.filter(_.startsWith("2.")).last
 ThisBuild / publishFullName := "Christopher Davenport"
 ThisBuild / publishGithubUser := "christopherdavenport"
@@ -24,7 +24,7 @@ val Scala212Cond = s"matrix.scala == '$Scala212'"
 
 def rubySetupSteps(cond: Option[String]) = Seq(
   WorkflowStep.Use(
-    "ruby", "setup-ruby", "v1",
+    UseRef.Public("ruby", "setup-ruby", "v1"),
     name = Some("Setup Ruby"),
     params = Map("ruby-version" -> "2.6.0"),
     cond = cond),
@@ -90,11 +90,11 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(MdocPlugin)
 
-val catsV = "2.4.1"
-val catsEffectV = "2.3.1"
-val uniqueV = "2.1.0-M10"
-val disciplineSpecs2V = "1.1.3"
-val specs2V = "4.5.1"
+val catsV = "2.4.2"
+val catsEffectV = "2.3.3"
+val uniqueV = "2.1.1"
+val disciplineSpecs2V = "1.1.4"
+val specs2V = "4.10.6"
 
 // General Settings
 lazy val commonSettings = Seq(
