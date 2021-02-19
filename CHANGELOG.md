@@ -6,6 +6,14 @@ This file summarizes **notable** changes for each release, but does not describe
 
 ## <a name="Unreleased"></a>Unreleased Changes
 
+## <a name="2.1.0"></a>New and Noteworthy for Version 2.1.0
+
+* cats-2.4.2
+* cats-effect-2.3.3
+* unique-2.1.1
+* Add support for Dotty 3.0.0-RC1
+* Drop support for Dotty 3.0.0-M2
+
 ## <a name="2.1.0-M2"></a>New and Noteworthy for Version 2.1.0-M2
 
 * Now publishes under `org.typelevel`
