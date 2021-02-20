@@ -3,7 +3,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 val Scala212 = "2.12.12"
 
 ThisBuild / baseVersion := "3.0"
-ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3", "3.0.0-M2", "3.0.0-M3")
+ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.3", "3.0.0-M3", "3.0.0-RC1")
 ThisBuild / scalaVersion := crossScalaVersions.value.filter(_.startsWith("2.")).last
 ThisBuild / publishFullName := "Christopher Davenport"
 ThisBuild / publishGithubUser := "christopherdavenport"
@@ -12,8 +12,8 @@ ThisBuild / versionIntroduced := Map(
   // First versions after the Typelevel move
   "2.12" -> "2.1.0",
   "2.13" -> "2.1.0",
-  "3.0.0-M2" -> "2.1.0",
   "3.0.0-M3" -> "2.1.0",
+  "3.0.0-RC1" -> "2.1.0",
 )
 
 ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
