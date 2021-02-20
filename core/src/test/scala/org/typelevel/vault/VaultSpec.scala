@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Christopher Davenport
+ * Copyright (c) 2020 Christopher Davenport
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -32,7 +32,7 @@ class VaultSpec extends Specification with ScalaCheck {
       (i: Int) =>
         val emptyVault : Vault = Vault.empty
 
-        Key.newKey[SyncIO, Int].map{k => 
+        Key.newKey[IO, Int].map{k => 
           emptyVault.insert(k, i).lookup(k)
         }.unsafeRunSync() === Some(i)
 
@@ -40,7 +40,7 @@ class VaultSpec extends Specification with ScalaCheck {
     "contain only the last value after inserts" >> prop {
       (l: List[String]) =>
         val emptyVault : Vault = Vault.empty
-        val test : SyncIO[Option[String]] = Key.newKey[SyncIO, String].map{k => 
+        val test : IO[Option[String]] = Key.newKey[IO, String].map{k => 
           l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).lookup(k)
         }
         test.unsafeRunSync() === l.headOption
@@ -49,7 +49,7 @@ class VaultSpec extends Specification with ScalaCheck {
     "contain no value after being emptied" >> prop {
       (l: List[String]) =>
         val emptyVault : Vault = Vault.empty
-        val test : SyncIO[Option[String]] = Key.newKey[SyncIO, String].map{k => 
+        val test : IO[Option[String]] = Key.newKey[IO, String].map{k => 
           l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).empty.lookup(k)
         }
         test.unsafeRunSync() === None
@@ -57,8 +57,8 @@ class VaultSpec extends Specification with ScalaCheck {
 
     "not be accessible via a different key" >> prop { (i: Int) =>
         val test = for {
-          key1 <- Key.newKey[SyncIO, Int]
-          key2 <- Key.newKey[SyncIO, Int]
+          key1 <- Key.newKey[IO, Int]
+          key2 <- Key.newKey[IO, Int]
         } yield Vault.empty.insert(key1, i).lookup(key2)
         test.unsafeRunSync() === None
     }
