@@ -92,10 +92,10 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(TutPlugin)
 
-val catsV = "2.4.0"
-val catsEffectV = "3.0.0-RC1"
-val disciplineSpecs2V = "1.1.3"
-val specs2V = "4.5.1"
+val catsV = "2.4.2"
+val catsEffectV = "3.0.0-RC2"
+val disciplineSpecs2V = "1.1.4"
+val specs2V = "4.10.6"
 
 // General Settings
 lazy val commonSettings = Seq(
