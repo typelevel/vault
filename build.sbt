@@ -109,7 +109,7 @@ lazy val commonSettings = Seq(
   // As of 3.0.0-M3, it's still broken
   useScala3doc := false,
   // Cursed tags
-  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3").contains(m.revision)))
+  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5").contains(m.revision)))
 )
 
 lazy val releaseSettings = {
