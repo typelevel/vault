@@ -12,8 +12,8 @@ ThisBuild / versionIntroduced := Map(
   // First versions after the Typelevel move
   "2.12" -> "2.1.0",
   "2.13" -> "2.1.0",
-  "3.0.0-M2" -> "2.1.0",
   "3.0.0-M3" -> "2.1.0",
+  "3.0.0-M2" -> "2.1.2",
 )
 
 ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
@@ -62,7 +62,7 @@ ThisBuild / githubWorkflowPublish := Seq(
 )
 
 lazy val vault = project.in(file("."))
-  .disablePlugins(NoPublishPlugin)
+  .enablePlugins(NoPublishPlugin)
   .settings(commonSettings, releaseSettings)
   .aggregate(coreJVM, coreJS)
 
