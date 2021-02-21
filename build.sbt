@@ -13,7 +13,7 @@ ThisBuild / versionIntroduced := Map(
   "2.12" -> "2.1.0",
   "2.13" -> "2.1.0",
   "3.0.0-M3" -> "2.1.0",
-  "3.0.0-RC1" -> "2.1.0",
+  "3.0.0-M2" -> "2.1.7",
 )
 
 ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
@@ -42,7 +42,7 @@ ThisBuild / githubWorkflowBuildPreamble ++=
   rubySetupSteps(Some(Scala212Cond))
 
 ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(List("test", "mimaReportBinaryIssues")),
+  WorkflowStep.Sbt(List("headerCheckAll", "test", "mimaReportBinaryIssues")),
 
   WorkflowStep.Sbt(
     List("docs/makeMicrosite"),
@@ -106,8 +106,8 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   ),
-  // As of 3.0.0-M3, it's still broken
-  useScala3doc := false
+  // Cursed tags
+  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6").contains(m.revision)))
 )
 
 lazy val releaseSettings = {
