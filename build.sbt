@@ -106,10 +106,8 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   ),
-  // As of 3.0.0-M3, it's still broken
-  useScala3doc := false,
   // Cursed tags
-  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5").contains(m.revision)))
+  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6").contains(m.revision)))
 )
 
 lazy val releaseSettings = {
