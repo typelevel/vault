@@ -13,7 +13,7 @@ ThisBuild / versionIntroduced := Map(
   "2.12" -> "2.1.0",
   "2.13" -> "2.1.0",
   "3.0.0-M3" -> "2.1.0",
-  "3.0.0-M2" -> "2.1.2",
+  "3.0.0-M2" -> "2.1.3",
 )
 
 ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
@@ -107,7 +107,9 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   ),
   // As of 3.0.0-M3, it's still broken
-  useScala3doc := false
+  useScala3doc := false,
+  // Cursed tags
+  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2").contains(m.revision)))
 )
 
 lazy val releaseSettings = {
