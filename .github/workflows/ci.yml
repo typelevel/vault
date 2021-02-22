@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        scala: [2.12.12, 2.13.3, 3.0.0-M2, 3.0.0-M3]
+        scala: [2.12.12, 2.13.3, 3.0.0-M3, 3.0.0-RC1]
         java: [adopt@1.8]
     runs-on: ${{ matrix.os }}
     steps:
@@ -67,7 +67,7 @@ jobs:
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
 
-      - run: sbt ++${{ matrix.scala }} test mimaReportBinaryIssues
+      - run: sbt ++${{ matrix.scala }} headerCheckAll test mimaReportBinaryIssues
 
       - if: matrix.scala == '2.12.12'
         run: sbt ++${{ matrix.scala }} docs/makeMicrosite
