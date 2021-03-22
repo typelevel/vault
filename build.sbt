@@ -93,7 +93,7 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(TutPlugin)
 
 val catsV = "2.4.2"
-val catsEffectV = "3.0.0-RC2"
+val catsEffectV = "3.0.0-RC3"
 val disciplineSpecs2V = "1.1.4"
 val specs2V = "4.10.6"
 
