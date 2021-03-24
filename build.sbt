@@ -46,6 +46,7 @@ ThisBuild / githubWorkflowBuild := Seq(
     List("docs/makeMicrosite"),
     cond = Some(Scala212Cond)))
 
+ThisBuild / githubWorkflowTargetBranches := List("*", "series/*")
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
 
 // currently only publishing tags
