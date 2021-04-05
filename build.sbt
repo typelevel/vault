@@ -1,6 +1,6 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
-val Scala212 = "2.12.12"
+val Scala212 = "2.12.13"
 
 ThisBuild / baseVersion := "3.0"
 ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.5", "3.0.0-RC2", "3.0.0-RC1")
@@ -91,7 +91,7 @@ lazy val docs = project.in(file("docs"))
   )
   .dependsOn(coreJVM)
   .enablePlugins(MicrositesPlugin)
-  .enablePlugins(TutPlugin)
+  .enablePlugins(MdocPlugin)
 
 val catsV = "2.5.0"
 val catsEffectV = "3.0.1"
@@ -113,7 +113,7 @@ lazy val commonSettings = Seq(
 
 lazy val releaseSettings = {
   Seq(
-    publishArtifact in Test := false,
+    Test / publishArtifact := false,
     scmInfo := Some(
       ScmInfo(
         url("https://github.com/typelevel/vault"),
@@ -128,6 +128,7 @@ lazy val releaseSettings = {
 lazy val micrositeSettings = {
   import microsites._
   Seq(
+    mdocIn := sourceDirectory.value / "main" / "mdoc",
     micrositeName := "vault",
     micrositeDescription := "Type-safe, persistent storage for values of arbitrary types",
     micrositeAuthor := "Typelevel",
@@ -147,16 +148,8 @@ lazy val micrositeSettings = {
       "gray-lighter" -> "#F4F3F4",
       "white-color" -> "#FFFFFF"
     ),
-    fork in tut := true,
-    scalacOptions in Tut --= Seq(
-      "-Xfatal-warnings",
-      "-Ywarn-unused-import",
-      "-Ywarn-numeric-widen",
-      "-Ywarn-dead-code",
-      "-Ywarn-unused:imports",
-      "-Xlint:-missing-interpolator,_"
-    ),
-    libraryDependencies += "com.47deg" %% "github4s" % "0.27.1",
+    libraryDependencySchemes += "org.typelevel" %% "cats-effect" % VersionScheme.Always,
+    libraryDependencies += "com.47deg" %% "github4s" % "0.28.3",
     micrositePushSiteWith := GitHub4s,
     micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),
     micrositeExtraMdFiles := Map(
