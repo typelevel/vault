@@ -94,7 +94,7 @@ lazy val docs = project.in(file("docs"))
   .enablePlugins(MdocPlugin)
 
 val catsV = "2.5.0"
-val catsEffectV = "3.0.1"
+val catsEffectV = "3.0.2"
 val disciplineSpecs2V = "1.1.4"
 val specs2V = "4.10.6"
 
