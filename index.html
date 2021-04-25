@@ -26,6 +26,10 @@
 <div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.effect._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">org.typelevel.vault._</span>
+
+<span class="c1">// Importing global cats-effect runtime to allow .unsafeRunSync; 
+// In real code you should follow cats-effect advice on obtaining a runtime
+</span><span class="k">import</span> <span class="nn">cats.effect.unsafe.implicits.global</span>
 </code></pre>
 </div>
 
@@ -45,45 +49,11 @@
 <span class="o">}</span>
 <span class="c1">// basicLookup: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">basicLookup</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res0: Option[Bar] = Some(Bar("", 1, 2L))
@@ -101,47 +71,13 @@
   <span class="o">(</span><span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key1</span><span class="o">),</span> <span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key2</span><span class="o">),</span> <span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key3</span><span class="o">))</span>
     <span class="o">.</span><span class="n">mapN</span><span class="o">((</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">))</span>
 <span class="o">}</span>
-<span class="c1">// lookupValuesOfDifferentTypes: IO[Option[(Bar, String, String)]] = Bind(
+<span class="c1">// lookupValuesOfDifferentTypes: IO[Option[(Bar, String, String)]] = FlatMap(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">lookupValuesOfDifferentTypes</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res1: Option[(Bar, String, String)] = Some(
@@ -156,45 +92,11 @@
 <span class="o">}</span>
 <span class="c1">// emptyLookup: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">emptyLookup</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res2: Option[Bar] = None
@@ -209,45 +111,11 @@
 <span class="o">}</span>
 <span class="c1">// doubleInsertTakesMostRecent: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">doubleInsertTakesMostRecent</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res3: Option[Bar] = Some(Bar("Monkey", 7, 5L))
@@ -262,45 +130,11 @@
 <span class="o">}</span>
 <span class="c1">// mergedVaultsTakesLatter: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">mergedVaultsTakesLatter</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res4: Option[Bar] = Some(Bar("Monkey", 7, 5L))
@@ -315,45 +149,11 @@
 <span class="o">}</span>
 <span class="c1">// deletedKeyIsMissing: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">deletedKeyIsMissing</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res5: Option[Bar] = None
@@ -371,45 +171,11 @@ larger datastructure that a <code class="highlighter-rouge">vault</code> enables
 <span class="o">}</span>
 <span class="c1">// lockerExample: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">lockerExample</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res6: Option[Bar] = Some(Bar("", 1, 2L))
@@ -421,47 +187,13 @@ larger datastructure that a <code class="highlighter-rouge">vault</code> enables
   <span class="nc">Locker</span><span class="o">.</span><span class="n">lock</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
     <span class="o">.</span><span class="n">unlock</span><span class="o">(</span><span class="n">key2</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// wrongLockerExample: IO[Option[Bar]] = Bind(
+<span class="c1">// wrongLockerExample: IO[Option[Bar]] = FlatMap(
 //   Map(
-//     Delay(org.typelevel.unique.Unique$$$Lambda$7227/1451895277@f481566),
-//     org.typelevel.vault.Key$$$Lambda$7228/1475776518@3ac85be1,
-//     StackTrace(
-//       List(
-//         cats.effect.internals.IOTracing$.buildFrame(IOTracing.scala:48),
-//         cats.effect.internals.IOTracing$.buildCachedFrame(IOTracing.scala:39),
-//         cats.effect.internals.IOTracing$.cached(IOTracing.scala:34),
-//         cats.effect.IO.map(IO.scala:106),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:870),
-//         cats.effect.IOLowPriorityInstances$IOEffect.map(IO.scala:863),
-//         cats.Functor$Ops.map(Functor.scala:233),
-//         cats.Functor$Ops.map$(Functor.scala:233),
-//         cats.Functor$ToFunctorOps$$anon$4.map(Functor.scala:250),
-//         org.typelevel.vault.Key$.newKey(Key.scala:42),
-//         repl.MdocSession$App.&lt;init&gt;(index.md:24),
-//         repl.MdocSession$.app(index.md:3),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$2(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withErr(Console.scala:196),
-//         mdoc.internal.document.DocumentBuilder$$doc$.$anonfun$build$1(DocumentBuilder.scala:89),
-//         scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:23),
-//         scala.util.DynamicVariable.withValue(DynamicVariable.scala:62),
-//         scala.Console$.withOut(Console.scala:167),
-//         mdoc.internal.document.DocumentBuilder$$doc$.build(DocumentBuilder.scala:88),
-//         mdoc.internal.markdown.MarkdownBuilder$.buildDocument(MarkdownBuilder.scala:44),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:182),
-//         mdoc.internal.markdown.Processor.processScalaInputs(Processor.scala:149),
-//         mdoc.internal.markdown.Processor.processDocument(Processor.scala:49),
-//         mdoc.internal.markdown.Markdown$.toMarkdown(Markdown.scala:131),
-//         mdoc.internal.cli.MainOps.handleMarkdown(MainOps.scala:82),
-//         mdoc.internal.cli.MainOps.handleFile(MainOps.scala:110),
-//         mdoc.internal.cli.MainOps.$anonfun$generateCompleteSite$1(MainOps.scala:156),
-//         scala.collection.LinearSeqOptimized.foldLeft(LinearSeqOptimized.scala:126),
-//         scala.collection.LinearSeqOptimized.foldLeft$(LinearSeqOptimized.scala:122),
-//         scala.collection.immutable.List.foldLeft(List.scala:91),
-//         mdoc.internal.cli.MainOps.generateCompleteSite(MainOps.scala:155),
-//         mdoc.internal.cli.MainOps.run(MainOps.scala:177),
-// ...
+//     Delay(cats.effect.kernel.Sync$$Lambda$7226/1855292553@4c912b0c),
+//     org.typelevel.vault.Key$$$Lambda$7227/1932724422@6235821a
+//   ),
+//   &lt;function1&gt;
+// )
 </span>
 <span class="n">wrongLockerExample</span><span class="o">.</span><span class="n">unsafeRunSync</span>
 <span class="c1">// res7: Option[Bar] = None
