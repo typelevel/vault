@@ -12,9 +12,8 @@ ThisBuild / versionIntroduced := Map(
   // First versions after the Typelevel move
   "2.12" -> "2.1.0",
   "2.13" -> "2.1.0",
-  "3.0.0-M3" -> "2.1.0",
-  "3.0.0-M2" -> "2.1.7",
-  "3.0.0-RC3" -> "3.0.2"
+  "3.0.0-RC2" -> "2.1.9",
+  "3.0.0-RC3" -> "2.1.10",
 )
 
 ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
