@@ -108,7 +108,7 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
   ),
   // Cursed tags
-  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6").contains(m.revision)))
+  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)))
 )
 
 lazy val releaseSettings = {
