@@ -10,7 +10,7 @@ It is analogous to a bank vault, where you can access different bank boxes with 
 
 ## Microsite
 
-Head on over [to the microsite](https://typelevel.github.io/vault/)
+Head on over [to the microsite](https://typelevel.org/vault/)
 
 ## Quick Start
 
@@ -19,6 +19,6 @@ To use vault in an existing SBT project with Scala 2.12 or a later version, add 
 
 ```scala
 libraryDependencies ++= Seq(
-  "io.chrisdavenport" %% "vault" % "<version>",
+  "io.chrisdavenport" %% "vault" % "<version>"
 )
 ```
