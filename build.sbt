@@ -134,6 +134,7 @@ lazy val micrositeSettings = {
     micrositeAuthor := "Typelevel",
     micrositeGithubOwner := "typelevel",
     micrositeGithubRepo := "vault",
+    micrositeUrl := "https://typelevel.org",
     micrositeBaseUrl := "/vault",
     micrositeDocumentationUrl := "https://www.javadoc.io/doc/typelevel/vault_2.13",
     micrositeFooterText := None,
