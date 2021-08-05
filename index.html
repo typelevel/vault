@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>vault</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Typelevel" /><meta name="description" content="Type-safe, persistent storage for values of arbitrary types" /><meta name="og:image" content="/vault/img/poster.png" /><meta name="image" property="og:image" content="/vault/img/poster.png" /><meta name="og:title" content="vault" /><meta name="title" property="og:title" content="vault" /><meta name="og:site_name" content="vault" /><meta name="og:url" content="https://github.com/typelevel/vault" /><meta name="og:type" content="website" /><meta name="og:description" content="Type-safe, persistent storage for values of arbitrary types" /><link rel="icon" type="image/png" href="/vault/img/favicon.png" /><meta name="twitter:title" content="vault" /><meta name="twitter:image" content="/vault/img/poster.png" /><meta name="twitter:description" content="Type-safe, persistent storage for values of arbitrary types" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/vault/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/vault/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/vault/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/vault/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/vault/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/vault/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/vault/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/vault/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/vault/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/vault/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/vault/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/vault/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/vault/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/vault/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/vault/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/vault/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/vault/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/vault/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/vault/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/vault/img/favicon310x150.png" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/vault/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/vault/css/light-style.css" /></head><body class="home"><nav id="navigation" aria-labelledby="main-navigation"><div class="navbar-wrapper container"><div class="navigation-brand"><a href="/vault/" class="brand background-mask"><div class="icon-wrapper"></div><span class="brand-title">vault</span></a></div><div class="navigation-menu"><ul><li class="search-nav"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li><a href="https://github.com/typelevel/vault" target="_blank" rel="noopener noreferrer"><i class="nav-item-icon fa fa-lg fa-github" hidden="true"></i><span class="nav-item-text">GitHub</span></a></li><li><a href="https://www.javadoc.io/doc/typelevel/vault_2.13"><i class="nav-item-icon fa fa-lg fa-file-text" hidden="true"></i><span class="nav-item-text">Documentation</span></a></li></ul></div></div></nav><header id="masthead"><div class="container text-center"><h1 class="masthead-description">Type-safe, persistent storage for values of arbitrary types</h1><a href="https://github.com/typelevel/vault" target="_blank" rel="noopener noreferrer" class="masthead-button">View on GitHub</a></div></header><main id="site-main"><section class="main-content"><div class="container"><div id="content"><h1 id="vault-">vault <a href="https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12"><img src="https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg" alt="Maven Central" /></a></h1>
+<!DOCTYPE html><html><head><title>vault</title><meta charset="utf-8" /><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Typelevel" /><meta name="description" content="Type-safe, persistent storage for values of arbitrary types" /><meta name="og:image" content="/vault/img/poster.png" /><meta name="image" property="og:image" content="/vault/img/poster.png" /><meta name="og:title" content="vault" /><meta name="title" property="og:title" content="vault" /><meta name="og:site_name" content="vault" /><meta name="og:url" content="https://github.com/typelevel/vault" /><meta name="og:type" content="website" /><meta name="og:description" content="Type-safe, persistent storage for values of arbitrary types" /><link rel="icon" type="image/png" href="/vault/img/favicon.png" /><meta name="twitter:title" content="vault" /><meta name="twitter:image" content="https://typelevel.org/vault/img/poster.png" /><meta name="twitter:description" content="Type-safe, persistent storage for values of arbitrary types" /><meta name="twitter:card" content="summary_large_image" /><link rel="icon" type="image/png" sizes="16x16" href="/vault/img/favicon16x16.png" /><link rel="icon" type="image/png" sizes="24x24" href="/vault/img/favicon24x24.png" /><link rel="icon" type="image/png" sizes="32x32" href="/vault/img/favicon32x32.png" /><link rel="icon" type="image/png" sizes="48x48" href="/vault/img/favicon48x48.png" /><link rel="icon" type="image/png" sizes="57x57" href="/vault/img/favicon57x57.png" /><link rel="icon" type="image/png" sizes="60x60" href="/vault/img/favicon60x60.png" /><link rel="icon" type="image/png" sizes="64x64" href="/vault/img/favicon64x64.png" /><link rel="icon" type="image/png" sizes="70x70" href="/vault/img/favicon70x70.png" /><link rel="icon" type="image/png" sizes="72x72" href="/vault/img/favicon72x72.png" /><link rel="icon" type="image/png" sizes="76x76" href="/vault/img/favicon76x76.png" /><link rel="icon" type="image/png" sizes="96x96" href="/vault/img/favicon96x96.png" /><link rel="icon" type="image/png" sizes="114x114" href="/vault/img/favicon114x114.png" /><link rel="icon" type="image/png" sizes="120x120" href="/vault/img/favicon120x120.png" /><link rel="icon" type="image/png" sizes="128x128" href="/vault/img/favicon128x128.png" /><link rel="icon" type="image/png" sizes="144x144" href="/vault/img/favicon144x144.png" /><link rel="icon" type="image/png" sizes="150x150" href="/vault/img/favicon150x150.png" /><link rel="icon" type="image/png" sizes="152x152" href="/vault/img/favicon152x152.png" /><link rel="icon" type="image/png" sizes="196x196" href="/vault/img/favicon196x196.png" /><link rel="icon" type="image/png" sizes="310x310" href="/vault/img/favicon310x310.png" /><link rel="icon" type="image/png" sizes="310x150" href="/vault/img/favicon310x150.png" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" /><link rel="stylesheet" href="/vault/highlight/styles/atom-one-light.css" /><link rel="stylesheet" href="/vault/css/light-style.css" /></head><body class="home"><nav id="navigation" aria-labelledby="main-navigation"><div class="navbar-wrapper container"><div class="navigation-brand"><a href="/vault/" class="brand background-mask"><div class="icon-wrapper"></div><span class="brand-title">vault</span></a></div><div class="navigation-menu"><ul><li class="search-nav"><div id="search-dropdown"><label><i class="fa fa-search"></i>Search</label><input id="search-bar" type="text" placeholder="Enter keywords here..." onclick="displayToggleSearch(event)" /><ul id="search-dropdown-content" class="dropdown dropdown-content"></ul></div></li><li><a href="https://github.com/typelevel/vault" target="_blank" rel="noopener noreferrer"><i class="nav-item-icon fa fa-lg fa-github" hidden="true"></i><span class="nav-item-text">GitHub</span></a></li><li><a href="https://www.javadoc.io/doc/typelevel/vault_2.13"><i class="nav-item-icon fa fa-lg fa-file-text" hidden="true"></i><span class="nav-item-text">Documentation</span></a></li></ul></div></div></nav><header id="masthead"><div class="container text-center"><h1 class="masthead-description">Type-safe, persistent storage for values of arbitrary types</h1><a href="https://github.com/typelevel/vault" target="_blank" rel="noopener noreferrer" class="masthead-button">View on GitHub</a></div></header><main id="site-main"><section class="main-content"><div class="container"><div id="content"><h1 id="vault-">vault <a href="https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12"><img src="https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg" alt="Maven Central" /></a></h1>
 
 <h2 id="project-goals">Project Goals</h2>
 
@@ -49,10 +49,15 @@
 <span class="o">}</span>
 <span class="c1">// basicLookup: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">basicLookup</span><span class="o">.</span><span class="n">unsafeRunSync</span>
@@ -73,10 +78,15 @@
 <span class="o">}</span>
 <span class="c1">// lookupValuesOfDifferentTypes: IO[Option[(Bar, String, String)]] = FlatMap(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">lookupValuesOfDifferentTypes</span><span class="o">.</span><span class="n">unsafeRunSync</span>
@@ -92,10 +102,15 @@
 <span class="o">}</span>
 <span class="c1">// emptyLookup: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">emptyLookup</span><span class="o">.</span><span class="n">unsafeRunSync</span>
@@ -111,10 +126,15 @@
 <span class="o">}</span>
 <span class="c1">// doubleInsertTakesMostRecent: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">doubleInsertTakesMostRecent</span><span class="o">.</span><span class="n">unsafeRunSync</span>
@@ -130,10 +150,15 @@
 <span class="o">}</span>
 <span class="c1">// mergedVaultsTakesLatter: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">mergedVaultsTakesLatter</span><span class="o">.</span><span class="n">unsafeRunSync</span>
@@ -149,10 +174,15 @@
 <span class="o">}</span>
 <span class="c1">// deletedKeyIsMissing: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">deletedKeyIsMissing</span><span class="o">.</span><span class="n">unsafeRunSync</span>
@@ -171,10 +201,15 @@ larger datastructure that a <code class="highlighter-rouge">vault</code> enables
 <span class="o">}</span>
 <span class="c1">// lockerExample: IO[Option[Bar]] = Map(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">lockerExample</span><span class="o">.</span><span class="n">unsafeRunSync</span>
@@ -189,10 +224,15 @@ larger datastructure that a <code class="highlighter-rouge">vault</code> enables
 <span class="o">}</span>
 <span class="c1">// wrongLockerExample: IO[Option[Bar]] = FlatMap(
 //   Map(
-//     Delay(cats.effect.kernel.Sync$$Lambda$7225/1778544941@3f92eaba),
-//     org.typelevel.vault.Key$$$Lambda$7226/266741340@14871a99
+//     Delay(
+//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
+//       cats.effect.tracing.TracingEvent$StackTrace
+//     ),
+//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
+//     cats.effect.tracing.TracingEvent$StackTrace
 //   ),
-//   &lt;function1&gt;
+//   &lt;function1&gt;,
+//   cats.effect.tracing.TracingEvent$StackTrace
 // )
 </span>
 <span class="n">wrongLockerExample</span><span class="o">.</span><span class="n">unsafeRunSync</span>
