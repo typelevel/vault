@@ -28,7 +28,7 @@ import org.scalacheck.effect.PropF
 class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
   test("Vault should contain a single value correctly") {
     PropF.forAllF {
-      i: Int =>
+      (i: Int) =>
         val emptyVault: Vault = Vault.empty
         val test = Key.newKey[IO, Int].map(k => emptyVault.insert(k, i).lookup(k))
 
@@ -38,7 +38,7 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
 
   test("Vault should contain only the last value after inserts") {
     PropF.forAllF {
-      l: List[String] =>
+      (l: List[String]) =>
         val emptyVault: Vault = Vault.empty
         val test = Key.newKey[IO, String].map { k =>
           l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).lookup(k)
@@ -50,7 +50,7 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
 
   test("Vault should contain no value after being emptied") {
     PropF.forAllF {
-      l: List[String] =>
+      (l: List[String]) =>
         val emptyVault : Vault = Vault.empty
         val test : IO[Option[String]] = Key.newKey[IO, String].map{k =>
           l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).empty.lookup(k)
@@ -62,7 +62,7 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
 
   test("Vault should not be accessible via a different key") {
     PropF.forAllF {
-      i: Int =>
+      (i: Int) =>
         val test = for {
           key1 <- Key.newKey[IO, Int]
           key2 <- Key.newKey[IO, Int]
