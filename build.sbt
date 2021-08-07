@@ -97,6 +97,7 @@ val catsV = "2.6.1"
 val catsEffectV = "3.2.2"
 val disciplineSpecs2V = "1.1.6"
 val specs2V = "4.10.6"
+val disciplineMunitV = "1.0.9"
 
 // General Settings
 lazy val commonSettings = Seq(
@@ -106,6 +107,7 @@ lazy val commonSettings = Seq(
     "org.typelevel"               %%% "cats-effect"                % catsEffectV,
     "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
     "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
+    "org.typelevel"               %%% "discipline-munit"           % disciplineMunitV   % Test
   ),
   // Cursed tags
   mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)))
