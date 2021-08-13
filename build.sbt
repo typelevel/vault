@@ -13,7 +13,7 @@ ThisBuild / versionIntroduced := Map(
   "2.12" -> "2.1.0",
   "2.13" -> "2.1.0",
   "3.0.0-RC2" -> "2.1.9",
-  "3.0.0-RC3" -> "2.1.10",
+  "3.0.0-RC3" -> "2.1.10"
 )
 
 ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
@@ -23,28 +23,23 @@ enablePlugins(SonatypeCiReleasePlugin)
 val Scala212Cond = s"matrix.scala == '$Scala212'"
 
 def rubySetupSteps(cond: Option[String]) = Seq(
-  WorkflowStep.Use(
-    UseRef.Public("ruby", "setup-ruby", "v1"),
-    name = Some("Setup Ruby"),
-    params = Map("ruby-version" -> "2.6.0"),
-    cond = cond),
-
-  WorkflowStep.Run(
-    List(
-      "gem install saas",
-      "gem install jekyll -v 3.2.1"),
-    name = Some("Install microsite dependencies"),
-    cond = cond))
+  WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"),
+                   name = Some("Setup Ruby"),
+                   params = Map("ruby-version" -> "2.6.0"),
+                   cond = cond
+  ),
+  WorkflowStep.Run(List("gem install saas", "gem install jekyll -v 3.2.1"),
+                   name = Some("Install microsite dependencies"),
+                   cond = cond
+  )
+)
 
 ThisBuild / githubWorkflowBuildPreamble ++=
   rubySetupSteps(Some(Scala212Cond))
 
-ThisBuild / githubWorkflowBuild := Seq(
-  WorkflowStep.Sbt(List("headerCheckAll", "test", "mimaReportBinaryIssues")),
-
-  WorkflowStep.Sbt(
-    List("docs/makeMicrosite"),
-    cond = Some(Scala212Cond)))
+ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("headerCheckAll", "test", "mimaReportBinaryIssues")),
+                                       WorkflowStep.Sbt(List("docs/makeMicrosite"), cond = Some(Scala212Cond))
+)
 
 ThisBuild / githubWorkflowTargetBranches := List("*", "series/*")
 ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
@@ -58,11 +53,11 @@ ThisBuild / githubWorkflowPublishPreamble ++=
 
 ThisBuild / githubWorkflowPublish := Seq(
   WorkflowStep.Sbt(List("release")),
-  WorkflowStep.Sbt(List(s"++${Scala212}", "docs/publishMicrosite"),
-    name = Some(s"Publish microsite")),
+  WorkflowStep.Sbt(List(s"++${Scala212}", "docs/publishMicrosite"), name = Some(s"Publish microsite"))
 )
 
-lazy val vault = project.in(file("."))
+lazy val vault = project
+  .in(file("."))
   .enablePlugins(NoPublishPlugin)
   .settings(commonSettings, releaseSettings)
   .aggregate(coreJVM, coreJS)
@@ -79,7 +74,8 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
 lazy val coreJVM = core.jvm
 lazy val coreJS = core.js
 
-lazy val docs = project.in(file("docs"))
+lazy val docs = project
+  .in(file("docs"))
   .settings(
     commonSettings,
     releaseSettings,
@@ -101,14 +97,17 @@ val specs2V = "4.10.6"
 lazy val commonSettings = Seq(
   organization := "org.typelevel",
   libraryDependencies ++= Seq(
-    "org.typelevel"               %%% "cats-core"                  % catsV,
-    "org.typelevel"               %%% "cats-effect"                % catsEffectV,
-    "org.typelevel"               %%% "unique"                     % uniqueV,
-    "org.typelevel"               %%% "cats-laws"                  % catsV              % Test,
-    "org.typelevel"               %%% "discipline-specs2"          % disciplineSpecs2V  % Test,
+    "org.typelevel" %%% "cats-core" % catsV,
+    "org.typelevel" %%% "cats-effect" % catsEffectV,
+    "org.typelevel" %%% "unique" % uniqueV,
+    "org.typelevel" %%% "cats-laws" % catsV % Test,
+    "org.typelevel" %%% "discipline-specs2" % disciplineSpecs2V % Test
   ),
   // Cursed tags
-  mimaPreviousArtifacts ~= (_.filterNot(m => Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)))
+  mimaPreviousArtifacts ~= (_.filterNot(m =>
+    Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)
+  )
+  )
 )
 
 lazy val releaseSettings = {
@@ -121,7 +120,7 @@ lazy val releaseSettings = {
       )
     ),
     homepage := Some(url("https://github.com/typelevel/vault")),
-    licenses := List("MIT" -> url("http://opensource.org/licenses/MIT")),
+    licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
   )
 }
 
@@ -152,9 +151,24 @@ lazy val micrositeSettings = {
     micrositePushSiteWith := GitHub4s,
     micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),
     micrositeExtraMdFiles := Map(
-      file("CHANGELOG.md")        -> ExtraMdFileConfig("changelog.md", "page", Map("title" -> "changelog", "section" -> "changelog", "position" -> "100")),
-      file("CODE_OF_CONDUCT.md")  -> ExtraMdFileConfig("code-of-conduct.md",   "page", Map("title" -> "code of conduct",   "section" -> "code of conduct",   "position" -> "101")),
-      file("LICENSE")             -> ExtraMdFileConfig("license.md",   "page", Map("title" -> "license",   "section" -> "license",   "position" -> "102"))
+      file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md",
+                                                "page",
+                                                Map("title" -> "changelog",
+                                                    "section" -> "changelog",
+                                                    "position" -> "100"
+                                                )
+      ),
+      file("CODE_OF_CONDUCT.md") -> ExtraMdFileConfig("code-of-conduct.md",
+                                                      "page",
+                                                      Map("title" -> "code of conduct",
+                                                          "section" -> "code of conduct",
+                                                          "position" -> "101"
+                                                      )
+      ),
+      file("LICENSE") -> ExtraMdFileConfig("license.md",
+                                           "page",
+                                           Map("title" -> "license", "section" -> "license", "position" -> "102")
+      )
     )
   )
 }
