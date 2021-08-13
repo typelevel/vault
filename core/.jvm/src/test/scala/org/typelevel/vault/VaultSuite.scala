@@ -27,48 +27,44 @@ import org.scalacheck.effect.PropF
 
 class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
   test("Vault should contain a single value correctly") {
-    PropF.forAllF {
-      (i: Int) =>
-        val emptyVault: Vault = Vault.empty
-        val test = Key.newKey[IO, Int].map(k => emptyVault.insert(k, i).lookup(k))
+    PropF.forAllF { (i: Int) =>
+      val emptyVault: Vault = Vault.empty
+      val test = Key.newKey[IO, Int].map(k => emptyVault.insert(k, i).lookup(k))
 
-        assertIO(test, Some(i))
+      assertIO(test, Some(i))
     }
   }
 
   test("Vault should contain only the last value after inserts") {
-    PropF.forAllF {
-      (l: List[String]) =>
-        val emptyVault: Vault = Vault.empty
-        val test = Key.newKey[IO, String].map { k =>
-          l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).lookup(k)
-        }
+    PropF.forAllF { (l: List[String]) =>
+      val emptyVault: Vault = Vault.empty
+      val test = Key.newKey[IO, String].map { k =>
+        l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).lookup(k)
+      }
 
-        assertIO(test, l.headOption)
+      assertIO(test, l.headOption)
     }
   }
 
   test("Vault should contain no value after being emptied") {
-    PropF.forAllF {
-      (l: List[String]) =>
-        val emptyVault : Vault = Vault.empty
-        val test : IO[Option[String]] = Key.newKey[IO, String].map{k =>
-          l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).empty.lookup(k)
-        }
+    PropF.forAllF { (l: List[String]) =>
+      val emptyVault: Vault = Vault.empty
+      val test: IO[Option[String]] = Key.newKey[IO, String].map { k =>
+        l.reverse.foldLeft(emptyVault)((v, a) => v.insert(k, a)).empty.lookup(k)
+      }
 
-        assertIO(test, None)
+      assertIO(test, None)
     }
   }
 
   test("Vault should not be accessible via a different key") {
-    PropF.forAllF {
-      (i: Int) =>
-        val test = for {
-          key1 <- Key.newKey[IO, Int]
-          key2 <- Key.newKey[IO, Int]
-        } yield Vault.empty.insert(key1, i).lookup(key2)
+    PropF.forAllF { (i: Int) =>
+      val test = for {
+        key1 <- Key.newKey[IO, Int]
+        key2 <- Key.newKey[IO, Int]
+      } yield Vault.empty.insert(key1, i).lookup(key2)
 
-        assertIO(test, None)
+      assertIO(test, None)
     }
   }
 }

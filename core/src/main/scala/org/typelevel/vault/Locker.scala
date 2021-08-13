@@ -32,14 +32,15 @@ import cats.effect.kernel.Unique
  * are then asked to unlock this locker with the same unique, we
  * know that the type MUST be the type of the Key, so we can
  * bring it back as that type safely.
- **/
-final class Locker private(private val unique: Unique.Token, private val a: Any){
+ */
+final class Locker private (private val unique: Unique.Token, private val a: Any) {
+
   /**
    * Retrieve the value from the Locker. If the reference equality
    * instance backed by a `Unique` value is the same then allows
    * conversion to that type, otherwise as it does not match
    * then this will be `None`
-   * 
+   *
    * @param k The key to check, if the internal Unique value matches
    * then this Locker can be unlocked as the specifed value
    */
@@ -47,6 +48,7 @@ final class Locker private(private val unique: Unique.Token, private val a: Any)
 }
 
 object Locker {
+
   /**
    * Put a single value into a Locker
    */
@@ -57,12 +59,12 @@ object Locker {
    * instance backed by a `Unique` value is the same then allows
    * conversion to that type, otherwise as it does not match
    * then this will be `None`
-   * 
+   *
    * @param k The key to check, if the internal Unique value matches
    * then this Locker can be unlocked as the specifed value
    * @param l The locked to check against
    */
-  def unlock[A](k: Key[A], l: Locker): Option[A] = 
+  def unlock[A](k: Key[A], l: Locker): Option[A] =
     // Equality By Reference Equality
     if (k.unique === l.unique) Some(l.a.asInstanceOf[A])
     else None

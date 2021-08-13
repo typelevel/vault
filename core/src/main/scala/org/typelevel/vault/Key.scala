@@ -27,25 +27,26 @@ import cats.Hash
 import cats.implicits._
 
 /**
-  * A unique value tagged with a specific type to that unique.
-  * Since it can only be created as a result of that, it links
-  * a Unique identifier to a type known by the compiler.
-  */
+ * A unique value tagged with a specific type to that unique.
+ * Since it can only be created as a result of that, it links
+ * a Unique identifier to a type known by the compiler.
+ */
 final class Key[A] private (private[vault] val unique: Unique.Token) {
   override def hashCode(): Int = unique.hashCode()
 }
 
 object Key {
+
   /**
    * Create A Typed Key
    */
   def newKey[F[_]: Functor: Unique, A]: F[Key[A]] = Unique[F].unique.map(new Key[A](_))
 
-  implicit def keyInstances[A]: Hash[Key[A]] = new Hash[Key[A]]{
+  implicit def keyInstances[A]: Hash[Key[A]] = new Hash[Key[A]] {
     // Members declared in cats.kernel.Eq
-    def eqv(x: Key[A],y: Key[A]): Boolean =
+    def eqv(x: Key[A], y: Key[A]): Boolean =
       x.unique === y.unique
-    
+
     // Members declared in cats.kernel.Hash
     def hash(x: Key[A]): Int = Hash[Unique.Token].hash(x.unique)
   }
