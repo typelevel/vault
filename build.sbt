@@ -158,3 +158,7 @@ lazy val micrositeSettings = {
     )
   )
 }
+
+// Scalafmt
+addCommandAlias("fmt", "; Compile / scalafmt; Test / scalafmt; scalafmtSbt")
+addCommandAlias("fmtCheck", "; Compile / scalafmtCheck; Test / scalafmtCheck; scalafmtSbtCheck")
