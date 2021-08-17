@@ -20,6 +20,8 @@ ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
 
 enablePlugins(SonatypeCiReleasePlugin)
 
+ThisBuild / githubWorkflowArtifactUpload := false
+
 val Scala212Cond = s"matrix.scala == '$Scala212'"
 
 def rubySetupSteps(cond: Option[String]) = Seq(
