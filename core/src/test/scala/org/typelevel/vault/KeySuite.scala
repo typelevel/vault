@@ -27,13 +27,13 @@ import cats.kernel.laws.discipline.{EqTests, HashTests}
 import munit.DisciplineSuite
 
 class KeySuite extends DisciplineSuite {
-  implicit def functionArbitrary[B, A: Arbitrary]: Arbitrary[B => A] = Arbitrary{
+  implicit def functionArbitrary[B, A: Arbitrary]: Arbitrary[B => A] = Arbitrary {
     for {
       a <- Arbitrary.arbitrary[A]
     } yield { (_: B) => a }
   }
 
-  implicit def uniqueKey[A]: Arbitrary[Key[A]] = Arbitrary{
+  implicit def uniqueKey[A]: Arbitrary[Key[A]] = Arbitrary {
     Arbitrary.arbitrary[Unit].map(_ => Key.newKey[SyncIO, A].unsafeRunSync())
   }
 
