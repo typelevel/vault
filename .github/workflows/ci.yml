@@ -65,12 +65,12 @@ jobs:
           gem install jekyll -v 3.2.1
 
       - name: Check that workflows are up to date
-        run: sbt ++${{ matrix.scala }} githubWorkflowCheck
+        run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
 
-      - run: sbt ++${{ matrix.scala }} headerCheckAll test mimaReportBinaryIssues
+      - run: sbt --client '++${{ matrix.scala }}; headerCheckAll; test; mimaReportBinaryIssues'
 
       - if: matrix.scala == '2.12.13'
-        run: sbt ++${{ matrix.scala }} docs/makeMicrosite
+        run: sbt --client '++${{ matrix.scala }}; docs/makeMicrosite'
 
   publish:
     name: Publish Artifacts
@@ -118,7 +118,7 @@ jobs:
           gem install saas
           gem install jekyll -v 3.2.1
 
-      - run: sbt ++${{ matrix.scala }} release
+      - run: sbt --client '++${{ matrix.scala }}; release'
 
       - name: Publish microsite
-        run: sbt ++${{ matrix.scala }} ++2.12.13 docs/publishMicrosite
+        run: sbt --client '++${{ matrix.scala }}; ++2.12.13; docs/publishMicrosite'
