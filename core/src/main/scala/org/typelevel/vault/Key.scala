@@ -31,8 +31,16 @@ import cats.implicits._
  * Since it can only be created as a result of that, it links
  * a Unique identifier to a type known by the compiler.
  */
-final class Key[A] private (private[vault] val unique: Unique.Token) {
+final class Key[A] private (private[vault] val unique: Unique.Token) extends InsertKey[A] with LookupKey[A] {
   override def hashCode(): Int = unique.hashCode()
+}
+
+sealed trait InsertKey[-A] {
+  private[vault] def unique: Unique.Token
+}
+
+sealed trait LookupKey[+A] {
+  private[vault] def unique: Unique.Token
 }
 
 object Key {

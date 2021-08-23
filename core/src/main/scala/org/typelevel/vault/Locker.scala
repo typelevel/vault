@@ -52,7 +52,27 @@ object Locker {
   /**
    * Put a single value into a Locker
    */
-  def lock[A](k: Key[A], a: A): Locker = new Locker(k.unique, a.asInstanceOf[Any])
+  def lock[A](k: InsertKey[A], a: A): Locker = new Locker(k.unique, a.asInstanceOf[Any])
+
+  /**
+   * Put a single value into a Locker
+   */
+  def lock[A](k: Key[A], a: A): Locker = lock(k: InsertKey[A], a)
+
+  /**
+   * Retrieve the value from the Locker. If the reference equality
+   * instance backed by a `Unique` value is the same then allows
+   * conversion to that type, otherwise as it does not match
+   * then this will be `None`
+   *
+   * @param k The key to check, if the internal Unique value matches
+   * then this Locker can be unlocked as the specifed value
+   * @param l The locked to check against
+   */
+  def unlock[A](k: LookupKey[A], l: Locker): Option[A] =
+    // Equality By Reference Equality
+    if (k.unique === l.unique) Some(l.a.asInstanceOf[A])
+    else None
 
   /**
    * Retrieve the value from the Locker. If the reference equality
@@ -65,7 +85,5 @@ object Locker {
    * @param l The locked to check against
    */
   def unlock[A](k: Key[A], l: Locker): Option[A] =
-    // Equality By Reference Equality
-    if (k.unique === l.unique) Some(l.a.asInstanceOf[A])
-    else None
+    unlock(k: LookupKey[A], l)
 }
