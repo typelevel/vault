@@ -62,7 +62,7 @@ jobs:
         if: matrix.scala == '2.12.14'
         run: |
           gem install saas
-          gem install jekyll -v 4
+          gem install jekyll -v 4.2.0
 
       - name: Check that workflows are up to date
         run: sbt --client '++${{ matrix.scala }}; githubWorkflowCheck'
@@ -116,7 +116,7 @@ jobs:
       - name: Install microsite dependencies
         run: |
           gem install saas
-          gem install jekyll -v 4
+          gem install jekyll -v 4.2.0
 
       - run: sbt --client '++${{ matrix.scala }}; release'
 
