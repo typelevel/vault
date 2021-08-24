@@ -44,7 +44,18 @@ final class Locker private (private val unique: Unique.Token, private val a: Any
    * @param k The key to check, if the internal Unique value matches
    * then this Locker can be unlocked as the specifed value
    */
-  def unlock[A](k: Key[A]): Option[A] = Locker.unlock(k, this)
+  def unlock[A](k: LookupKey[A]): Option[A] = Locker.unlock(k, this)
+
+  /**
+   * Retrieve the value from the Locker. If the reference equality
+   * instance backed by a `Unique` value is the same then allows
+   * conversion to that type, otherwise as it does not match
+   * then this will be `None`
+   *
+   * @param k The key to check, if the internal Unique value matches
+   * then this Locker can be unlocked as the specifed value
+   */
+  private[vault] def unlock[A](k: Key[A]): Option[A] = unlock(k: LookupKey[A])
 }
 
 object Locker {
