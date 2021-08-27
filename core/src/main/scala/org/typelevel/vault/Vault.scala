@@ -24,12 +24,9 @@ package org.typelevel.vault
 import cats.effect.kernel.Unique
 
 /**
- * Vault - A persistent store for values of arbitrary types.
- * This extends the behavior of the locker, into a Map
- * that maps Keys to Lockers, creating a heterogenous
- * store of values, accessible by keys. Such that the Vault
- * has no type information, all the type information is contained
- * in the keys.
+ * Vault - A persistent store for values of arbitrary types. This extends the behavior of the locker, into a Map that
+ * maps Keys to Lockers, creating a heterogenous store of values, accessible by keys. Such that the Vault has no type
+ * information, all the type information is contained in the keys.
  */
 final class Vault private (private val m: Map[Unique.Token, Locker]) {
 
