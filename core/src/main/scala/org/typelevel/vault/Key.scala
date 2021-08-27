@@ -27,8 +27,7 @@ import cats.Hash
 import cats.implicits._
 
 /**
- * A unique value tagged with a specific type to that unique.
- * Since it can only be created as a result of that, it links
+ * A unique value tagged with a specific type to that unique. Since it can only be created as a result of that, it links
  * a Unique identifier to a type known by the compiler.
  */
 final class Key[A] private (private[vault] val unique: Unique.Token) {
