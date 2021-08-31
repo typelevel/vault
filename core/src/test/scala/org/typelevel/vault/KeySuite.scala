@@ -25,6 +25,7 @@ import org.scalacheck._
 import cats.effect.SyncIO
 import cats.kernel.laws.discipline.{EqTests, HashTests}
 import munit.DisciplineSuite
+import cats.laws.discipline.InvariantTests
 
 class KeySuite extends DisciplineSuite {
   implicit def functionArbitrary[B, A: Arbitrary]: Arbitrary[B => A] = Arbitrary {
@@ -39,4 +40,5 @@ class KeySuite extends DisciplineSuite {
 
   checkAll("Key", HashTests[Key[Int]].hash)
   checkAll("Key", EqTests[Key[Int]].eqv)
+  checkAll("Key", InvariantTests[Key].invariant[Int, String, Boolean])
 }

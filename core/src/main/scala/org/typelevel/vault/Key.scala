@@ -25,13 +25,31 @@ import cats.Functor
 import cats.effect.kernel.Unique
 import cats.Hash
 import cats.implicits._
+import cats.Invariant
 
 /**
  * A unique value tagged with a specific type to that unique. Since it can only be created as a result of that, it links
  * a Unique identifier to a type known by the compiler.
  */
-final class Key[A] private (private[vault] val unique: Unique.Token) {
+sealed trait Key[A] { outer =>
+  private[vault] def unique: Unique.Token
+  private[vault] type I
+  private[vault] def in: A => I
+  private[vault] def out: I => A
   override def hashCode(): Int = unique.hashCode()
+
+  /**
+   * Create a copy of this key that references the same underlying vault element, transformed from
+   * type `B` before insert, and to `B` after lookup.
+   */
+  def imap[B](f: A => B)(g: B => A): Key[B] =
+    new Key[B] {
+      val unique = outer.unique
+      type I = outer.I
+      val in = g andThen outer.in
+      val out = outer.out andThen f
+    }
+
 }
 
 object Key {
@@ -39,7 +57,14 @@ object Key {
   /**
    * Create A Typed Key
    */
-  def newKey[F[_]: Functor: Unique, A]: F[Key[A]] = Unique[F].unique.map(new Key[A](_))
+  def newKey[F[_]: Functor: Unique, A]: F[Key[A]] = Unique[F].unique.map { u =>
+    new Key[A] {
+      val unique = u
+      type I = A
+      val in = identity
+      val out = identity
+    }
+  }
 
   implicit def keyInstances[A]: Hash[Key[A]] = new Hash[Key[A]] {
     // Members declared in cats.kernel.Eq
@@ -49,4 +74,11 @@ object Key {
     // Members declared in cats.kernel.Hash
     def hash(x: Key[A]): Int = Hash[Unique.Token].hash(x.unique)
   }
+
+  implicit val InvariantKey: Invariant[Key] =
+    new Invariant[Key] {
+      def imap[A, B](fa: Key[A])(f: A => B)(g: B => A): Key[B] =
+        fa.imap(f)(g)
+    }
+
 }
