@@ -36,6 +36,7 @@ final class Key[A] private (
   private[vault] val imapping: InvariantMapping[A]
 ) {
 
+  // Delegates, for convenience.
   private[vault] type I = imapping.I
   private[vault] val in = imapping.in
   private[vault] val out = imapping.out
@@ -48,7 +49,8 @@ final class Key[A] private (
    * Create a copy of this key that references the same underlying vault element, transformed from
    * type `B` before insert, and to `B` after lookup.
    */
-  def imap[B](f: A => B)(g: B => A): Key[B] = new Key(unique, imapping.imap(f)(g))
+  def imap[B](f: A => B)(g: B => A): Key[B] =
+    new Key(unique, imapping.imap(f)(g))
 
   override def hashCode(): Int = unique.hashCode()
 
