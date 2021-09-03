@@ -21,6 +21,8 @@
 
 package org.typelevel.vault
 
+import cats.data.AndThen
+
 trait InvariantMapping[A] { outer =>
   type I
   def in: A => I
@@ -28,8 +30,8 @@ trait InvariantMapping[A] { outer =>
   def imap[B](f: A => B)(g: B => A): InvariantMapping[B] =
     new InvariantMapping[B] {
       type I = outer.I
-      val in = g andThen outer.in
-      val out = outer.out andThen f
+      val in = AndThen(g) andThen outer.in
+      val out = AndThen(outer.out) andThen f
     }
 }
 
