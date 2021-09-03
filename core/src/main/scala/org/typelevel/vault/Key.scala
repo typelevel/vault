@@ -34,7 +34,7 @@ import cats.Invariant
 final class Key[A] private (
   private[vault] val unique: Unique.Token,
   private[vault] val imapping: InvariantMapping[A]
-) {
+) extends InsertKey[A] with LookupKey[A] {
 
   // Delegates, for convenience.
   private[vault] type I = imapping.I
@@ -54,6 +54,18 @@ final class Key[A] private (
 
   override def hashCode(): Int = unique.hashCode()
 
+}
+
+sealed trait InsertKey[-A] {
+  private[vault] def unique: Unique.Token
+  private[vault] type I
+  private[vault] def in: A => I
+}
+
+sealed trait LookupKey[+A] {
+  private[vault] def unique: Unique.Token
+  private[vault] type I
+  private[vault] def out: I => A
 }
 
 object Key {

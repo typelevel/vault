@@ -38,17 +38,37 @@ final class Vault private (private val m: Map[Unique.Token, Locker]) {
   /**
    * Lookup the value of a key in this vault
    */
-  def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
+  def lookup[A](k: LookupKey[A]): Option[A] = Vault.lookup(k, this)
+
+  /**
+   * Lookup the value of a key in this vault
+   */
+  private[vault] def lookup[A](k: Key[A]): Option[A] = lookup(k: LookupKey[A])
 
   /**
    * Insert a value for a given key. Overwrites any previous value.
    */
-  def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
+  def insert[A](k: InsertKey[A], a: A): Vault = Vault.insert(k, a, this)
+
+  /**
+   * Insert a value for a given key. Overwrites any previous value.
+   */
+  private[vault] def insert[A](k: Key[A], a: A): Vault = insert(k: InsertKey[A], a)
 
   /**
    * Checks whether this Vault is empty
    */
   def isEmpty: Boolean = Vault.isEmpty(this)
+
+  /**
+   * Delete a key from the vault
+   */
+  def delete[A](k: InsertKey[A]): Vault = Vault.delete(k, this)
+
+  /**
+   * Delete a key from the vault
+   */
+  def delete[A](k: LookupKey[A]): Vault = Vault.delete(k, this)
 
   /**
    * Delete a key from the vault
@@ -75,20 +95,44 @@ object Vault {
   /**
    * Lookup the value of a key in the vault
    */
-  def lookup[A](k: Key[A], v: Vault): Option[A] =
+  def lookup[A](k: LookupKey[A], v: Vault): Option[A] =
     v.m.get(k.unique).flatMap(Locker.unlock(k, _))
+
+  /**
+   * Lookup the value of a key in the vault
+   */
+  def lookup[A](k: Key[A], v: Vault): Option[A] =
+    lookup(k: LookupKey[A], v)
+
+  /**
+   * Insert a value for a given key. Overwrites any previous value.
+   */
+  def insert[A](k: InsertKey[A], a: A, v: Vault): Vault =
+    new Vault(v.m + (k.unique -> Locker.lock(k, a)))
 
   /**
    * Insert a value for a given key. Overwrites any previous value.
    */
   def insert[A](k: Key[A], a: A, v: Vault): Vault =
-    new Vault(v.m + (k.unique -> Locker.lock(k, a)))
+    insert(k: InsertKey[A], a, v)
 
   /**
    * Checks whether the given Vault is empty
    */
   def isEmpty(v: Vault): Boolean =
     v.m.isEmpty
+
+  /**
+   * Delete a key from the vault
+   */
+  def delete[A](k: InsertKey[A], v: Vault): Vault =
+    new Vault(v.m - k.unique)
+
+  /**
+   * Delete a key from the vault
+   */
+  def delete[A](k: LookupKey[A], v: Vault): Vault =
+    new Vault(v.m - k.unique)
 
   /**
    * Delete a key from the vault
