@@ -23,7 +23,7 @@ package org.typelevel.vault
 
 import cats.data.AndThen
 
-trait InvariantMapping[A] { outer =>
+private[vault] trait InvariantMapping[A] { outer =>
   type I
   def in: A => I
   def out: I => A
@@ -35,7 +35,7 @@ trait InvariantMapping[A] { outer =>
     }
 }
 
-object InvariantMapping {
+private[vault] object InvariantMapping {
   def id[A]: InvariantMapping[A] =
     new InvariantMapping[A] {
       type I = A
