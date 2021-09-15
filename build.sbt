@@ -105,7 +105,7 @@ lazy val commonSettings = Seq(
     if (ScalaArtifacts.isScala3(scalaVersion.value)) Nil
     else
       Seq(
-        compilerPlugin("org.typelevel" % "kind-projector" % kindProjectorV cross CrossVersion.full)
+        compilerPlugin(("org.typelevel" % "kind-projector" % kindProjectorV).cross(CrossVersion.full))
       )
   ),
   libraryDependencies ++= Seq(
