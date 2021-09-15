@@ -96,10 +96,18 @@ val catsEffectV = "3.2.8"
 val disciplineMunitV = "1.0.9"
 val scalacheckEffectV = "1.0.2"
 val munitCatsEffectV = "1.0.5"
+val kindProjectorV = "0.13.2"
 
 // General Settings
 lazy val commonSettings = Seq(
   organization := "org.typelevel",
+  libraryDependencies ++= (
+    if (ScalaArtifacts.isScala3(scalaVersion.value)) Nil
+    else
+      Seq(
+        compilerPlugin("org.typelevel" % "kind-projector" % kindProjectorV cross CrossVersion.full)
+      )
+  ),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-core" % catsV,
     "org.typelevel" %%% "cats-effect" % catsEffectV,
