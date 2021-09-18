@@ -122,7 +122,7 @@ larger datastructure that a `vault` enables.
 val lockerExample = for {
   key <- Key.newKey[IO, Bar]
 } yield {
-  Locker.lock(key, Bar("", 1, 2L))
+  Locker(key, Bar("", 1, 2L))
     .unlock(key)
 }
 
@@ -132,7 +132,7 @@ val wrongLockerExample = for {
   key <- Key.newKey[IO, Bar]
   key2 <- Key.newKey[IO, Bar]
 } yield {
-  Locker.lock(key, Bar("", 1, 2L))
+  Locker(key, Bar("", 1, 2L))
     .unlock(key2)
 }
 
