@@ -2,7 +2,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 val Scala212 = "2.12.14"
 
-ThisBuild / baseVersion := "3.0"
+ThisBuild / baseVersion := "3.1"
 ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.6", "3.0.1")
 ThisBuild / scalaVersion := crossScalaVersions.value.filter(_.startsWith("2.")).last
 ThisBuild / publishFullName := "Christopher Davenport"

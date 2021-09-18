@@ -59,8 +59,11 @@ final class Key[A] private (
 
 }
 
-sealed trait InsertKey[-A] { outer =>
+sealed trait DeleteKey {
   private[vault] def unique: Unique.Token
+}
+
+sealed trait InsertKey[-A] extends DeleteKey { outer =>
   private[vault] type I
   private[vault] def in: A => I
 
@@ -80,7 +83,7 @@ object InsertKey {
     }
 }
 
-sealed trait LookupKey[+A] { outer =>
+sealed trait LookupKey[+A] extends DeleteKey { outer =>
   private[vault] def unique: Unique.Token
   private[vault] type I
   private[vault] def out: I => A
