@@ -6,239 +6,235 @@
 
 <p>Inspiration was drawn from <a href="https://github.com/HeinrichApfelmus/vault">HeinrichApfelmus/vault</a> and the original <a href="https://apfelmus.nfshost.com/blog/2011/09/04-vault.html">blog post</a></p>
 
-<p>A vault is a type-safe, persistent storage for values of arbitrary types. Like <code class="highlighter-rouge">Ref</code>, it should be capable of storing values of any type in it, but unlike <code class="highlighter-rouge">Ref</code>, behave like a persistent, first-class data structure.</p>
+<p>A vault is a type-safe, persistent storage for values of arbitrary types. Like <code class="language-plaintext highlighter-rouge">Ref</code>, it should be capable of storing values of any type in it, but unlike <code class="language-plaintext highlighter-rouge">Ref</code>, behave like a persistent, first-class data structure.</p>
 
 <p>It is analogous to a bank vault, where you can access different bank boxes with different keys; hence the name.</p>
 
 <h2 id="quick-start">Quick Start</h2>
 
 <p>To use vault in an existing SBT project with Scala 2.11 or a later version, add the following dependencies to your
-<code class="highlighter-rouge">build.sbt</code> depending on your needs:</p>
+<code class="language-plaintext highlighter-rouge">build.sbt</code> depending on your needs:</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">libraryDependencies</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span>
   <span class="s">"org.typelevel"</span> <span class="o">%%</span> <span class="s">"vault"</span> <span class="o">%</span> <span class="s">"&lt;version&gt;"</span><span class="o">,</span>
 <span class="o">)</span>
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <p>First the imports</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.effect._</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">import</span> <span class="nn">cats.effect._</span>
 <span class="k">import</span> <span class="nn">cats.implicits._</span>
 <span class="k">import</span> <span class="nn">org.typelevel.vault._</span>
 
-<span class="c1">// Importing global cats-effect runtime to allow .unsafeRunSync; 
-// In real code you should follow cats-effect advice on obtaining a runtime
-</span><span class="k">import</span> <span class="nn">cats.effect.unsafe.implicits.global</span>
-</code></pre>
-</div>
+<span class="c1">// Importing global cats-effect runtime to allow .unsafeRunSync; </span>
+<span class="c1">// In real code you should follow cats-effect advice on obtaining a runtime</span>
+<span class="k">import</span> <span class="nn">cats.effect.unsafe.implicits.global</span>
+</code></pre></div></div>
 
 <p>Then some basic operations</p>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Bar</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">c</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">case</span> <span class="k">class</span> <span class="nc">Bar</span><span class="o">(</span><span class="n">a</span><span class="k">:</span> <span class="kt">String</span><span class="o">,</span> <span class="n">b</span><span class="k">:</span> <span class="kt">Int</span><span class="o">,</span> <span class="n">c</span><span class="k">:</span> <span class="kt">Long</span><span class="o">)</span>
 
-<span class="c1">// Creating keys are effects, but interacting with the vault
-// not, it acts like a simple persistent store.
-</span>
-<span class="k">val</span> <span class="n">basicLookup</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="c1">// Creating keys are effects, but interacting with the vault</span>
+<span class="c1">// not, it acts like a simple persistent store.</span>
+
+<span class="k">val</span> <span class="nv">basicLookup</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
-  <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span>
-    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+  <span class="nv">Vault</span><span class="o">.</span><span class="py">empty</span>
+    <span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// basicLookup: IO[Option[Bar]] = Map(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">basicLookup</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res0: Option[Bar] = Some(Bar("", 1, 2L))
-</span>
-<span class="k">val</span> <span class="n">lookupValuesOfDifferentTypes</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key1</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
-  <span class="n">key2</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">String</span><span class="o">]</span>
-  <span class="n">key3</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">String</span><span class="o">]</span>
+<span class="c1">// basicLookup: IO[Option[Bar]] = Map(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
+
+<span class="nv">basicLookup</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res0: Option[Bar] = Some(Bar("", 1, 2L))</span>
+
+<span class="k">val</span> <span class="nv">lookupValuesOfDifferentTypes</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key1</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+  <span class="n">key2</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">String</span><span class="o">]</span>
+  <span class="n">key3</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">String</span><span class="o">]</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
-  <span class="k">val</span> <span class="n">myvault</span> <span class="k">=</span> <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span>
-    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key1</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key2</span><span class="o">,</span> <span class="s">"I'm at Key2"</span><span class="o">)</span>
-    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key3</span><span class="o">,</span> <span class="s">"Key3 Reporting for Duty!"</span><span class="o">)</span>
+  <span class="k">val</span> <span class="nv">myvault</span> <span class="k">=</span> <span class="nv">Vault</span><span class="o">.</span><span class="py">empty</span>
+    <span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key1</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key2</span><span class="o">,</span> <span class="s">"I'm at Key2"</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key3</span><span class="o">,</span> <span class="s">"Key3 Reporting for Duty!"</span><span class="o">)</span>
   
-  <span class="o">(</span><span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key1</span><span class="o">),</span> <span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key2</span><span class="o">),</span> <span class="n">myvault</span><span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key3</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">mapN</span><span class="o">((</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">))</span>
+  <span class="o">(</span><span class="nv">myvault</span><span class="o">.</span><span class="py">lookup</span><span class="o">(</span><span class="n">key1</span><span class="o">),</span> <span class="nv">myvault</span><span class="o">.</span><span class="py">lookup</span><span class="o">(</span><span class="n">key2</span><span class="o">),</span> <span class="nv">myvault</span><span class="o">.</span><span class="py">lookup</span><span class="o">(</span><span class="n">key3</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">mapN</span><span class="o">((</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">,</span><span class="k">_</span><span class="o">))</span>
 <span class="o">}</span>
-<span class="c1">// lookupValuesOfDifferentTypes: IO[Option[(Bar, String, String)]] = FlatMap(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">lookupValuesOfDifferentTypes</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res1: Option[(Bar, String, String)] = Some(
-//   (Bar("", 1, 2L), "I'm at Key2", "Key3 Reporting for Duty!")
-// )
-</span>
-<span class="k">val</span> <span class="n">emptyLookup</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="c1">// lookupValuesOfDifferentTypes: IO[Option[(Bar, String, String)]] = FlatMap(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
+
+<span class="nv">lookupValuesOfDifferentTypes</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res1: Option[(Bar, String, String)] = Some(</span>
+<span class="c1">//   (Bar("", 1, 2L), "I'm at Key2", "Key3 Reporting for Duty!")</span>
+<span class="c1">// )</span>
+
+<span class="k">val</span> <span class="nv">emptyLookup</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
-  <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span>
-    <span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+  <span class="nv">Vault</span><span class="o">.</span><span class="py">empty</span>
+    <span class="o">.</span><span class="py">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// emptyLookup: IO[Option[Bar]] = Map(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">emptyLookup</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res2: Option[Bar] = None
-</span>
-<span class="k">val</span> <span class="n">doubleInsertTakesMostRecent</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="c1">// emptyLookup: IO[Option[Bar]] = Map(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
+
+<span class="nv">emptyLookup</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res2: Option[Bar] = None</span>
+
+<span class="k">val</span> <span class="nv">doubleInsertTakesMostRecent</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
-  <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span>
-    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">"Monkey"</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">5L</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+  <span class="nv">Vault</span><span class="o">.</span><span class="py">empty</span>
+    <span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">"Monkey"</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">5L</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// doubleInsertTakesMostRecent: IO[Option[Bar]] = Map(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">doubleInsertTakesMostRecent</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res3: Option[Bar] = Some(Bar("Monkey", 7, 5L))
-</span>
-<span class="k">val</span> <span class="n">mergedVaultsTakesLatter</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="c1">// doubleInsertTakesMostRecent: IO[Option[Bar]] = Map(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
+
+<span class="nv">doubleInsertTakesMostRecent</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res3: Option[Bar] = Some(Bar("Monkey", 7, 5L))</span>
+
+<span class="k">val</span> <span class="nv">mergedVaultsTakesLatter</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
   <span class="o">(</span>
-    <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span><span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span> <span class="o">++</span>
-    <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span><span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">"Monkey"</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">5L</span><span class="o">))</span>
-  <span class="o">).</span><span class="n">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+    <span class="nv">Vault</span><span class="o">.</span><span class="py">empty</span><span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span> <span class="o">++</span>
+    <span class="nv">Vault</span><span class="o">.</span><span class="py">empty</span><span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">"Monkey"</span><span class="o">,</span> <span class="mi">7</span><span class="o">,</span> <span class="mi">5L</span><span class="o">))</span>
+  <span class="o">).</span><span class="py">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// mergedVaultsTakesLatter: IO[Option[Bar]] = Map(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">mergedVaultsTakesLatter</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res4: Option[Bar] = Some(Bar("Monkey", 7, 5L))
-</span>
-<span class="k">val</span> <span class="n">deletedKeyIsMissing</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
-<span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
-  <span class="nc">Vault</span><span class="o">.</span><span class="n">empty</span>
-    <span class="o">.</span><span class="n">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
-    <span class="o">.</span><span class="n">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
-<span class="o">}</span>
-<span class="c1">// deletedKeyIsMissing: IO[Option[Bar]] = Map(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">deletedKeyIsMissing</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res5: Option[Bar] = None
-</span></code></pre>
-</div>
+<span class="c1">// mergedVaultsTakesLatter: IO[Option[Bar]] = Map(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
 
-<p>We can also interact with a single value <code class="highlighter-rouge">locker</code> instead of the
-larger datastructure that a <code class="highlighter-rouge">vault</code> enables.</p>
+<span class="nv">mergedVaultsTakesLatter</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res4: Option[Bar] = Some(Bar("Monkey", 7, 5L))</span>
 
-<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="k">val</span> <span class="n">lockerExample</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="k">val</span> <span class="nv">deletedKeyIsMissing</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
-  <span class="nc">Locker</span><span class="o">.</span><span class="n">lock</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">unlock</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+  <span class="nv">Vault</span><span class="o">.</span><span class="py">empty</span>
+    <span class="o">.</span><span class="py">insert</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">delete</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">lookup</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// lockerExample: IO[Option[Bar]] = Map(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">lockerExample</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res6: Option[Bar] = Some(Bar("", 1, 2L))
-</span>
-<span class="k">val</span> <span class="n">wrongLockerExample</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
-  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
-  <span class="n">key2</span> <span class="k">&lt;-</span> <span class="nc">Key</span><span class="o">.</span><span class="n">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="c1">// deletedKeyIsMissing: IO[Option[Bar]] = Map(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
+
+<span class="nv">deletedKeyIsMissing</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res5: Option[Bar] = None</span>
+</code></pre></div></div>
+
+<p>We can also interact with a single value <code class="language-plaintext highlighter-rouge">locker</code> instead of the
+larger datastructure that a <code class="language-plaintext highlighter-rouge">vault</code> enables.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">lockerExample</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
 <span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
-  <span class="nc">Locker</span><span class="o">.</span><span class="n">lock</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
-    <span class="o">.</span><span class="n">unlock</span><span class="o">(</span><span class="n">key2</span><span class="o">)</span>
+  <span class="nc">Locker</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">unlock</span><span class="o">(</span><span class="n">key</span><span class="o">)</span>
 <span class="o">}</span>
-<span class="c1">// wrongLockerExample: IO[Option[Bar]] = FlatMap(
-//   Map(
-//     Delay(
-//       cats.effect.kernel.Sync$$Lambda$15554/1417816032@f193f91,
-//       cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     org.typelevel.vault.Key$$$Lambda$15555/1645895637@aa0aed,
-//     cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   &lt;function1&gt;,
-//   cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span>
-<span class="n">wrongLockerExample</span><span class="o">.</span><span class="n">unsafeRunSync</span>
-<span class="c1">// res7: Option[Bar] = None
-</span></code></pre>
-</div>
+<span class="c1">// lockerExample: IO[Option[Bar]] = Map(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
+
+<span class="nv">lockerExample</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res6: Option[Bar] = Some(Bar("", 1, 2L))</span>
+
+<span class="k">val</span> <span class="nv">wrongLockerExample</span> <span class="k">=</span> <span class="k">for</span> <span class="o">{</span>
+  <span class="n">key</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+  <span class="n">key2</span> <span class="k">&lt;-</span> <span class="nv">Key</span><span class="o">.</span><span class="py">newKey</span><span class="o">[</span><span class="kt">IO</span>, <span class="kt">Bar</span><span class="o">]</span>
+<span class="o">}</span> <span class="k">yield</span> <span class="o">{</span>
+  <span class="nc">Locker</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="nc">Bar</span><span class="o">(</span><span class="s">""</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">2L</span><span class="o">))</span>
+    <span class="o">.</span><span class="py">unlock</span><span class="o">(</span><span class="n">key2</span><span class="o">)</span>
+<span class="o">}</span>
+<span class="c1">// wrongLockerExample: IO[Option[Bar]] = FlatMap(</span>
+<span class="c1">//   Map(</span>
+<span class="c1">//     Delay(</span>
+<span class="c1">//       cats.effect.kernel.Sync$$Lambda$7358/916951667@48a65acb,</span>
+<span class="c1">//       cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//     ),</span>
+<span class="c1">//     org.typelevel.vault.Key$$$Lambda$7360/717524311@609c12b5,</span>
+<span class="c1">//     cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">//   ),</span>
+<span class="c1">//   &lt;function1&gt;,</span>
+<span class="c1">//   cats.effect.tracing.TracingEvent$StackTrace</span>
+<span class="c1">// )</span>
+
+<span class="nv">wrongLockerExample</span><span class="o">.</span><span class="py">unsafeRunSync</span>
+<span class="c1">// res7: Option[Bar] = None</span>
+</code></pre></div></div>
 </div></div></section></main><footer id="site-footer"><div class="container"><div class="row"><p>vault is designed and developed by <a href="https://github.com/typelevel/vault" target="_blank" rel="noopener noreferrer">Typelevel</a></p></div></div></footer><script src="/vault/highlight/highlight.pack.js"></script><script src="/vault/lunr/lunr.js"></script><script>
 // For all code blocks, copy the language from the containing div
 // to the inner code tag (where hljs expects it to be)
