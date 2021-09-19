@@ -39,7 +39,18 @@ final class Locker private (private val unique: Unique.Token, private val a: Any
    * @param k
    *   The key to check, if the internal Unique value matches then this Locker can be unlocked as the specifed value
    */
-  def unlock[A](k: Key[A]): Option[A] = Locker.unlock(k, this)
+  def unlock[A](k: LookupKey[A]): Option[A] =
+    if (k.unique === unique) Some(k.out(a.asInstanceOf[k.I]))
+    else None
+
+  /**
+   * Retrieve the value from the Locker. If the reference equality instance backed by a `Unique` value is the same then
+   * allows conversion to that type, otherwise as it does not match then this will be `None`
+   *
+   * @param k
+   *   The key to check, if the internal Unique value matches then this Locker can be unlocked as the specifed value
+   */
+  private[vault] def unlock[A](k: Key[A]): Option[A] = unlock(k: LookupKey[A])
 }
 
 object Locker {
@@ -47,7 +58,13 @@ object Locker {
   /**
    * Put a single value into a Locker
    */
-  def lock[A](k: Key[A], a: A): Locker = new Locker(k.unique, a.asInstanceOf[Any])
+  def apply[A](k: InsertKey[A], a: A): Locker = new Locker(k.unique, k.in(a))
+
+  /**
+   * Put a single value into a Locker
+   */
+  @deprecated("Use Locker(k, a)", since = "3.1.0")
+  def lock[A](k: Key[A], a: A): Locker = Locker(k, a)
 
   /**
    * Retrieve the value from the Locker. If the reference equality instance backed by a `Unique` value is the same then
@@ -58,8 +75,6 @@ object Locker {
    * @param l
    *   The locked to check against
    */
-  def unlock[A](k: Key[A], l: Locker): Option[A] =
-    // Equality By Reference Equality
-    if (k.unique === l.unique) Some(l.a.asInstanceOf[A])
-    else None
+  @deprecated("Use l.unlock(k)", since = "3.1.0")
+  def unlock[A](k: Key[A], l: Locker): Option[A] = l.unlock(k)
 }

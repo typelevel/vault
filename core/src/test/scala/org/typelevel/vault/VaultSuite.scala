@@ -67,4 +67,47 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
       assertIO(test, None)
     }
   }
+
+  test("Vault should contain mapped value inserted with unmapped key") {
+    PropF.forAllF { (i: Int) =>
+      val emptyVault: Vault = Vault.empty
+      val test =
+        for {
+          k  <- Key.newKey[IO, Int]
+          kʹ  = k.imap(_.toString)(_.toInt)  // create a mapped key
+          vʹ  = emptyVault.insert(k, i)      // insert using unmapped key
+          s   = vʹ.lookup(kʹ)                // read using mapped key
+        } yield s
+      assertIO(test, Some(i.toString))
+    }
+  }
+
+  test("Vault should contain unmapped value inserted with mapped key") {
+    PropF.forAllF { (i: Int) =>
+      val emptyVault: Vault = Vault.empty
+      val test =
+        for {
+          k  <- Key.newKey[IO, Int]
+          kʹ  = k.imap(_.toString)(_.toInt)       // create a mapped key
+          vʹ  = emptyVault.insert(kʹ, i.toString) // insert using mapped key
+          n   = vʹ.lookup(k)                      // read using unmapped key
+        } yield n
+      assertIO(test, Some(i))
+    }
+  }
+
+  test("Vault should contain mapped value inserted with mapped key") {
+    PropF.forAllF { (i: Int) =>
+      val emptyVault: Vault = Vault.empty
+      val test =
+        for {
+          k  <- Key.newKey[IO, Int]
+          kʹ  = k.imap(_.toString)(_.toInt)       // create a mapped key
+          vʹ  = emptyVault.insert(kʹ, i.toString) // insert using mapped key
+          n   = vʹ.lookup(kʹ)                      // read using mapped key
+        } yield n
+      assertIO(test, Some(i.toString))
+    }
+  }
+
 }

@@ -11,3 +11,6 @@ tags
 .vscode
 .bsp
 .jekyll-cache/
+
+# metals
+metals.sbt
