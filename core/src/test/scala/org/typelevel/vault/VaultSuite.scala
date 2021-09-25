@@ -73,10 +73,10 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
       val emptyVault: Vault = Vault.empty
       val test =
         for {
-          k  <- Key.newKey[IO, Int]
-          kʹ  = k.imap(_.toString)(_.toInt)  // create a mapped key
-          vʹ  = emptyVault.insert(k, i)      // insert using unmapped key
-          s   = vʹ.lookup(kʹ)                // read using mapped key
+          k <- Key.newKey[IO, Int]
+          kʹ = k.imap(_.toString)(_.toInt) // create a mapped key
+          vʹ = emptyVault.insert(k, i) // insert using unmapped key
+          s = vʹ.lookup(kʹ) // read using mapped key
         } yield s
       assertIO(test, Some(i.toString))
     }
@@ -87,10 +87,10 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
       val emptyVault: Vault = Vault.empty
       val test =
         for {
-          k  <- Key.newKey[IO, Int]
-          kʹ  = k.imap(_.toString)(_.toInt)       // create a mapped key
-          vʹ  = emptyVault.insert(kʹ, i.toString) // insert using mapped key
-          n   = vʹ.lookup(k)                      // read using unmapped key
+          k <- Key.newKey[IO, Int]
+          kʹ = k.imap(_.toString)(_.toInt) // create a mapped key
+          vʹ = emptyVault.insert(kʹ, i.toString) // insert using mapped key
+          n = vʹ.lookup(k) // read using unmapped key
         } yield n
       assertIO(test, Some(i))
     }
@@ -101,10 +101,10 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
       val emptyVault: Vault = Vault.empty
       val test =
         for {
-          k  <- Key.newKey[IO, Int]
-          kʹ  = k.imap(_.toString)(_.toInt)       // create a mapped key
-          vʹ  = emptyVault.insert(kʹ, i.toString) // insert using mapped key
-          n   = vʹ.lookup(kʹ)                      // read using mapped key
+          k <- Key.newKey[IO, Int]
+          kʹ = k.imap(_.toString)(_.toInt) // create a mapped key
+          vʹ = emptyVault.insert(kʹ, i.toString) // insert using mapped key
+          n = vʹ.lookup(kʹ) // read using mapped key
         } yield n
       assertIO(test, Some(i.toString))
     }
