@@ -30,8 +30,8 @@ private[vault] trait InvariantMapping[A] { outer =>
   def imap[B](f: A => B)(g: B => A): InvariantMapping[B] =
     new InvariantMapping[B] {
       type I = outer.I
-      val in = AndThen(g) andThen outer.in
-      val out = AndThen(outer.out) andThen f
+      val in = AndThen(g).andThen(outer.in)
+      val out = AndThen(outer.out).andThen(f)
     }
 }
 
