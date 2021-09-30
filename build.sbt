@@ -95,7 +95,7 @@ val catsV = "2.6.1"
 val catsEffectV = "3.2.9"
 val disciplineMunitV = "1.0.9"
 val scalacheckEffectV = "1.0.2"
-val munitCatsEffectV = "1.0.5"
+val munitCatsEffectV = "1.0.6"
 val kindProjectorV = "0.13.2"
 
 // General Settings
