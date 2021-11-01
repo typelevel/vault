@@ -90,7 +90,7 @@ lazy val docs = project
   .enablePlugins(MdocPlugin)
 
 val catsV = "2.6.1"
-val catsEffectV = "2.5.4"
+val catsEffectV = "3.2.9"
 val uniqueV = "2.1.5"
 val disciplineSpecs2V = "1.1.6"
 val specs2V = "4.10.6"
