@@ -92,7 +92,7 @@ lazy val docs = project
 val catsV = "2.6.1"
 val catsEffectV = "2.5.4"
 val uniqueV = "2.1.5"
-val disciplineSpecs2V = "1.2.4"
+val disciplineSpecs2V = "1.2.5"
 val specs2V = "4.10.6"
 
 // General Settings
