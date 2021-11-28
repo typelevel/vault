@@ -89,7 +89,7 @@ lazy val docs = project
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(MdocPlugin)
 
-val catsV = "2.6.1"
+val catsV = "2.7.0"
 val catsEffectV = "2.5.4"
 val uniqueV = "2.1.5"
 val disciplineSpecs2V = "1.2.5"
