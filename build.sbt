@@ -38,9 +38,6 @@ def rubySetupSteps(cond: Option[String]) = Seq(
   )
 )
 
-ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
-ThisBuild / githubWorkflowJavaVersions := Seq("adoptium@8", "adoptium@17")
-
 ThisBuild / githubWorkflowBuildPreamble ++=
   rubySetupSteps(Some(Scala212Cond))
 
