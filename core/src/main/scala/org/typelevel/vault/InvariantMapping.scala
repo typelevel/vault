@@ -21,24 +21,25 @@
 
 package org.typelevel.vault
 
-import org.scalacheck._
-import cats.effect.IO
-import org.specs2.mutable.Specification
-import org.typelevel.discipline.specs2.mutable.Discipline
-import cats.kernel.laws.discipline.{EqTests, HashTests}
+import cats.data.AndThen
 
-class KeyTests extends Specification with Discipline {
+private[vault] trait InvariantMapping[A] { outer =>
+  type I
+  def in: A => I
+  def out: I => A
+  def imap[B](f: A => B)(g: B => A): InvariantMapping[B] =
+    new InvariantMapping[B] {
+      type I = outer.I
+      val in = AndThen(g).andThen(outer.in)
+      val out = AndThen(outer.out).andThen(f)
+    }
+}
 
-  implicit def functionArbitrary[B, A: Arbitrary]: Arbitrary[B => A] = Arbitrary {
-    for {
-      a <- Arbitrary.arbitrary[A]
-    } yield { (_: B) => a }
-  }
-
-  implicit def uniqueKey[A]: Arbitrary[Key[A]] = Arbitrary {
-    Arbitrary.arbitrary[Unit].map(_ => Key.newKey[IO, A].unsafeRunSync())
-  }
-
-  checkAll("Key", HashTests[Key[Int]].hash)
-  checkAll("Key", EqTests[Key[Int]].eqv)
+private[vault] object InvariantMapping {
+  def id[A]: InvariantMapping[A] =
+    new InvariantMapping[A] {
+      type I = A
+      val in = identity
+      val out = identity
+    }
 }

@@ -21,17 +21,14 @@
 
 package org.typelevel.vault
 
-import org.typelevel.unique.Unique
+import cats.effect.kernel.Unique
 
 /**
- * Vault - A persistent store for values of arbitrary types.
- * This extends the behavior of the locker, into a Map
- * that maps Keys to Lockers, creating a heterogenous
- * store of values, accessible by keys. Such that the Vault
- * has no type information, all the type information is contained
- * in the keys.
+ * Vault - A persistent store for values of arbitrary types. This extends the behavior of the locker, into a Map that
+ * maps Keys to Lockers, creating a heterogenous store of values, accessible by keys. Such that the Vault has no type
+ * information, all the type information is contained in the keys.
  */
-final class Vault private (private val m: Map[Unique, Locker]) {
+final class Vault private (private val m: Map[Unique.Token, Locker]) {
 
   /**
    * Empty this Vault
@@ -41,32 +38,48 @@ final class Vault private (private val m: Map[Unique, Locker]) {
   /**
    * Lookup the value of a key in this vault
    */
-  def lookup[A](k: Key[A]): Option[A] = Vault.lookup(k, this)
+  def lookup[A](k: LookupKey[A]): Option[A] = m.get(k.unique).flatMap(_.unlock(k))
+
+  /**
+   * Lookup the value of a key in this vault
+   */
+  private[vault] def lookup[A](k: Key[A]): Option[A] = lookup(k: LookupKey[A])
 
   /**
    * Insert a value for a given key. Overwrites any previous value.
    */
-  def insert[A](k: Key[A], a: A): Vault = Vault.insert(k, a, this)
+  def insert[A](k: InsertKey[A], a: A): Vault = new Vault(m + (k.unique -> Locker(k, a)))
+
+  /**
+   * Insert a value for a given key. Overwrites any previous value.
+   */
+  private[vault] def insert[A](k: Key[A], a: A): Vault = insert(k: InsertKey[A], a)
 
   /**
    * Checks whether this Vault is empty
    */
-  def isEmpty: Boolean = Vault.isEmpty(this)
+  def isEmpty: Boolean = m.isEmpty
 
   /**
    * Delete a key from the vault
    */
-  def delete[A](k: Key[A]): Vault = Vault.delete(k, this)
+  // Keeping unused type parameter for source compat
+  def delete[A](k: DeleteKey): Vault = new Vault(m - k.unique)
+
+  /**
+   * Delete a key from the vault
+   */
+  private[vault] def delete[A](k: Key[A]): Vault = delete(k: DeleteKey)
 
   /**
    * Adjust the value for a given key if it's present in the vault.
    */
-  def adjust[A](k: Key[A], f: A => A): Vault = Vault.adjust(k, f, this)
+  def adjust[A](k: Key[A], f: A => A): Vault = lookup(k).fold(this)(a => insert(k, f(a)))
 
   /**
-   * Merge Two Vaults. that is prioritized.
+   * Merge Two Vaults. `that` is prioritized.
    */
-  def ++(that: Vault): Vault = Vault.union(this, that)
+  def ++(that: Vault): Vault = new Vault(this.m ++ that.m)
 }
 object Vault {
 
@@ -78,37 +91,40 @@ object Vault {
   /**
    * Lookup the value of a key in the vault
    */
+  @deprecated("Use v.lookup(k)", "3.1.0")
   def lookup[A](k: Key[A], v: Vault): Option[A] =
-    v.m.get(k.unique).flatMap(Locker.unlock(k, _))
+    v.lookup(k)
 
   /**
    * Insert a value for a given key. Overwrites any previous value.
    */
+  @deprecated("Use v.insert(k, a)", "3.1.0")
   def insert[A](k: Key[A], a: A, v: Vault): Vault =
-    new Vault(v.m + (k.unique -> Locker.lock(k, a)))
+    v.insert(k, a)
 
   /**
    * Checks whether the given Vault is empty
    */
-  def isEmpty(v: Vault): Boolean =
-    v.m.isEmpty
+  @deprecated("Use v.isEmpty", "3.1.0")
+  def isEmpty(v: Vault): Boolean = v.isEmpty
 
   /**
    * Delete a key from the vault
    */
-  def delete[A](k: Key[A], v: Vault): Vault =
-    new Vault(v.m - k.unique)
+  @deprecated("Use v.delete(k)", "3.1.0")
+  def delete[A](k: Key[A], v: Vault): Vault = v.delete(k)
 
   /**
    * Adjust the value for a given key if it's present in the vault.
    */
+  @deprecated("Use v.adjust(k, f)", "3.1.0")
   def adjust[A](k: Key[A], f: A => A, v: Vault): Vault =
-    lookup(k, v).fold(v)(a => insert(k, f(a), v))
+    v.adjust(k, f)
 
   /**
    * Merge Two Vaults. v2 is prioritized.
    */
-  def union(v1: Vault, v2: Vault): Vault =
-    new Vault(v1.m ++ v2.m)
+  @deprecated("Use v2 ++ v2", "3.1.0")
+  def union(v1: Vault, v2: Vault): Vault = v1 ++ v2
 
 }

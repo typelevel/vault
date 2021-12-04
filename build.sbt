@@ -1,9 +1,11 @@
 import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
 
 val Scala212 = "2.12.15"
+val Scala213 = "2.13.7"
+val Scala3 = "3.0.2"
 
-ThisBuild / baseVersion := "2.1"
-ThisBuild / crossScalaVersions := Seq(Scala212, "2.13.7", "3.0.2")
+ThisBuild / baseVersion := "3.1"
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
 ThisBuild / scalaVersion := crossScalaVersions.value.filter(_.startsWith("2.")).last
 ThisBuild / publishFullName := "Christopher Davenport"
 ThisBuild / publishGithubUser := "christopherdavenport"
@@ -30,11 +32,14 @@ def rubySetupSteps(cond: Option[String]) = Seq(
                    params = Map("ruby-version" -> "2.6.0"),
                    cond = cond
   ),
-  WorkflowStep.Run(List("gem install saas", "gem install jekyll -v 3.2.1"),
+  WorkflowStep.Run(List("gem install saas", "gem install jekyll -v 4.2.0"),
                    name = Some("Install microsite dependencies"),
                    cond = cond
   )
 )
+
+ThisBuild / githubWorkflowEnv += ("JABBA_INDEX" -> "https://github.com/typelevel/jdk-index/raw/main/index.json")
+ThisBuild / githubWorkflowJavaVersions := Seq("adoptium@8", "adoptium@17")
 
 ThisBuild / githubWorkflowBuildPreamble ++=
   rubySetupSteps(Some(Scala212Cond))
@@ -90,26 +95,34 @@ lazy val docs = project
   .enablePlugins(MdocPlugin)
 
 val catsV = "2.7.0"
-val catsEffectV = "2.5.4"
-val uniqueV = "2.1.5"
-val disciplineSpecs2V = "1.2.5"
-val specs2V = "4.10.6"
+val catsEffectV = "3.3.0"
+val disciplineMunitV = "1.0.9"
+val scalacheckEffectV = "1.0.3"
+val munitCatsEffectV = "1.0.6"
+val kindProjectorV = "0.13.2"
 
 // General Settings
 lazy val commonSettings = Seq(
   organization := "org.typelevel",
+  libraryDependencies ++= (
+    if (ScalaArtifacts.isScala3(scalaVersion.value)) Nil
+    else
+      Seq(
+        compilerPlugin(("org.typelevel" % "kind-projector" % kindProjectorV).cross(CrossVersion.full))
+      )
+  ),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-core" % catsV,
     "org.typelevel" %%% "cats-effect" % catsEffectV,
-    "org.typelevel" %%% "unique" % uniqueV,
     "org.typelevel" %%% "cats-laws" % catsV % Test,
-    "org.typelevel" %%% "discipline-specs2" % disciplineSpecs2V % Test
+    "org.typelevel" %%% "discipline-munit" % disciplineMunitV % Test,
+    "org.typelevel" %%% "scalacheck-effect-munit" % scalacheckEffectV % Test,
+    "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectV % Test
   ),
   // Cursed tags
   mimaPreviousArtifacts ~= (_.filterNot(m =>
     Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)
-  )
-  )
+  ))
 )
 
 lazy val releaseSettings = {
@@ -135,6 +148,7 @@ lazy val micrositeSettings = {
     micrositeAuthor := "Typelevel",
     micrositeGithubOwner := "typelevel",
     micrositeGithubRepo := "vault",
+    micrositeUrl := "https://typelevel.org",
     micrositeBaseUrl := "/vault",
     micrositeDocumentationUrl := "https://www.javadoc.io/doc/typelevel/vault_2.13",
     micrositeFooterText := None,
@@ -149,6 +163,7 @@ lazy val micrositeSettings = {
       "gray-lighter" -> "#F4F3F4",
       "white-color" -> "#FFFFFF"
     ),
+    libraryDependencySchemes += "org.typelevel" %% "cats-effect" % VersionScheme.Always,
     libraryDependencies += "com.47deg" %% "github4s" % "0.28.4",
     micrositePushSiteWith := GitHub4s,
     micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),

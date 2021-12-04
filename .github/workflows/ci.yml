@@ -15,10 +15,11 @@ on:
     tags: [v*, v*]
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
   SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+  JABBA_INDEX: 'https://github.com/typelevel/jdk-index/raw/main/index.json'
+  SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
   PGP_SECRET: ${{ secrets.PGP_SECRET }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
@@ -64,7 +65,7 @@ jobs:
         if: matrix.scala == '2.12.15'
         run: |
           gem install saas
-          gem install jekyll -v 3.2.1
+          gem install jekyll -v 4.2.0
 
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
@@ -120,7 +121,7 @@ jobs:
       - name: Install microsite dependencies
         run: |
           gem install saas
-          gem install jekyll -v 3.2.1
+          gem install jekyll -v 4.2.0
 
       - run: sbt ++${{ matrix.scala }} release
 

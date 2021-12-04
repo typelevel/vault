@@ -1,4 +1,4 @@
-# vault [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12)
+# vault [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.typelevel/vault_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.typelevel/vault_2.12) ![Continuous Integration](https://github.com/typelevel/vault/workflows/Continuous%20Integration/badge.svg)
 
 Vault is a tiny library that provides a single data structure called vault.
 
@@ -10,15 +10,15 @@ It is analogous to a bank vault, where you can access different bank boxes with 
 
 ## Microsite
 
-Head on over [to the microsite](https://christopherdavenport.github.io/vault/)
+Head on over [to the microsite](https://typelevel.org/vault/)
 
 ## Quick Start
 
-To use vault in an existing SBT project with Scala 2.11 or a later version, add the following dependencies to your
+To use vault in an existing SBT project with Scala 2.12 or a later version, add the following dependencies to your
 `build.sbt` depending on your needs:
 
 ```scala
 libraryDependencies ++= Seq(
-  "io.chrisdavenport" %% "vault" % "<version>",
+  "org.typelevel" %% "vault" % "<version>"
 )
 ```

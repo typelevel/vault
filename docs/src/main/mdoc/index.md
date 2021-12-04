@@ -32,6 +32,10 @@ First the imports
 import cats.effect._
 import cats.implicits._
 import org.typelevel.vault._
+
+// Importing global cats-effect runtime to allow .unsafeRunSync; 
+// In real code you should follow cats-effect advice on obtaining a runtime
+import cats.effect.unsafe.implicits.global
 ```
 
 Then some basic operations
@@ -118,7 +122,7 @@ larger datastructure that a `vault` enables.
 val lockerExample = for {
   key <- Key.newKey[IO, Bar]
 } yield {
-  Locker.lock(key, Bar("", 1, 2L))
+  Locker(key, Bar("", 1, 2L))
     .unlock(key)
 }
 
@@ -128,7 +132,7 @@ val wrongLockerExample = for {
   key <- Key.newKey[IO, Bar]
   key2 <- Key.newKey[IO, Bar]
 } yield {
-  Locker.lock(key, Bar("", 1, 2L))
+  Locker(key, Bar("", 1, 2L))
     .unlock(key2)
 }
 
