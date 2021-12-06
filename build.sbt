@@ -36,6 +36,12 @@ def rubySetupSteps(cond: Option[String]) = Seq(
   )
 )
 
+val JDK8 = JavaSpec.temurin("8")
+val JDK11 = JavaSpec.temurin("11")
+val JDK17 = JavaSpec.temurin("17")
+
+ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK11, JDK17)
+
 ThisBuild / githubWorkflowBuildPreamble ++=
   rubySetupSteps(Some(Scala212Cond))
 
