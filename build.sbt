@@ -15,7 +15,7 @@ val JDK17 = JavaSpec.temurin("17")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK11, JDK17)
 
-lazy val root = tlCrossRootProject.aggregate(core, docs)
+lazy val root = tlCrossRootProject.aggregate(core)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
