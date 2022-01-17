@@ -49,11 +49,17 @@ lazy val root = tlCrossRootProject.aggregate(core)
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
-  .settings(commonSettings)
   .settings(
-    name := "vault"
+    name := "vault",
+    libraryDependencies ++= Seq(
+      "org.typelevel" %%% "cats-core" % catsV,
+      "org.typelevel" %%% "cats-effect" % catsEffectV,
+      "org.typelevel" %%% "cats-laws" % catsV % Test,
+      "org.typelevel" %%% "discipline-munit" % disciplineMunitV % Test,
+      "org.typelevel" %%% "scalacheck-effect-munit" % scalacheckEffectV % Test,
+      "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectV % Test
+    )
   )
-  .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
 
 lazy val docs = project
   .in(file("docs"))
@@ -68,22 +74,6 @@ val disciplineMunitV = "1.0.9"
 val scalacheckEffectV = "1.0.3"
 val munitCatsEffectV = "1.0.7"
 val kindProjectorV = "0.13.2"
-
-// General Settings
-lazy val commonSettings = Seq(
-  libraryDependencies ++= Seq(
-    "org.typelevel" %%% "cats-core" % catsV,
-    "org.typelevel" %%% "cats-effect" % catsEffectV,
-    "org.typelevel" %%% "cats-laws" % catsV % Test,
-    "org.typelevel" %%% "discipline-munit" % disciplineMunitV % Test,
-    "org.typelevel" %%% "scalacheck-effect-munit" % scalacheckEffectV % Test,
-    "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectV % Test
-  ),
-  // Cursed tags
-  mimaPreviousArtifacts ~= (_.filterNot(m =>
-    Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)
-  ))
-)
 
 lazy val micrositeSettings = {
   import microsites._
