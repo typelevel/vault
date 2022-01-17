@@ -6,7 +6,7 @@ ThisBuild / tlBaseVersion := "3.1"
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala3, Scala213)
 ThisBuild / tlVersionIntroduced := Map("3" -> "3.0.3")
 ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
-startYear := Some(2021)
+ThisBuild / startYear := Some(2021)
 
 def rubySetupSteps(cond: Option[String]) = Seq(
   WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"),
