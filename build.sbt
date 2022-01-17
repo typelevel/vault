@@ -26,7 +26,7 @@ val JDK17 = JavaSpec.temurin("17")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK11, JDK17)
 
-val docsCond = s"matrix.scala == '$Scala213' && matrix.project == 'rootJVM'"
+val docsCond = s"matrix.java == '${JDK8.render}' && matrix.scala == '$Scala213' && matrix.project == 'rootJVM'"
 
 ThisBuild / githubWorkflowBuildPreamble ++=
   rubySetupSteps(Some(docsCond))
@@ -37,7 +37,7 @@ ThisBuild / githubWorkflowBuild += WorkflowStep.Sbt(
   cond = Some(docsCond)
 )
 
-ThisBuild / githubWorkflowPublishPreamble ++= rubySetupSteps(Some(docsCond))
+ThisBuild / githubWorkflowPublishPreamble ++= rubySetupSteps(None)
 
 ThisBuild / githubWorkflowPublish += WorkflowStep.Sbt(
   List("docs/publishMicrosite"),
@@ -63,6 +63,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
 
 lazy val docs = project
   .in(file("docs"))
+  .settings(tlFatalWarningsInCi := false)
   .settings(micrositeSettings)
   .dependsOn(core.jvm)
   .enablePlugins(MicrositesPlugin)
