@@ -7,18 +7,7 @@ ThisBuild / crossScalaVersions := Seq(Scala212, Scala3, Scala213)
 ThisBuild / tlVersionIntroduced := Map("3" -> "3.0.3")
 ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
 ThisBuild / startYear := Some(2021)
-
-def rubySetupSteps(cond: Option[String]) = Seq(
-  WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"),
-                   name = Some("Setup Ruby"),
-                   params = Map("ruby-version" -> "2.6.0"),
-                   cond = cond
-  ),
-  WorkflowStep.Run(List("gem install saas", "gem install jekyll -v 4.2.0"),
-                   name = Some("Install microsite dependencies"),
-                   cond = cond
-  )
-)
+ThisBuild / tlApiDocsUrl := Some(url("https://www.javadoc.io/doc/org.typelevel/vault_2.13/latest/org/typelevel/vault/"))
 
 val JDK8 = JavaSpec.temurin("8")
 val JDK11 = JavaSpec.temurin("11")
@@ -26,25 +15,7 @@ val JDK17 = JavaSpec.temurin("17")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK11, JDK17)
 
-val docsCond = s"matrix.java == '${JDK8.render}' && matrix.scala == '$Scala213' && matrix.project == 'rootJVM'"
-
-ThisBuild / githubWorkflowBuildPreamble ++=
-  rubySetupSteps(Some(docsCond))
-
-ThisBuild / githubWorkflowBuild += WorkflowStep.Sbt(
-  List("docs/makeMicrosite"),
-  name = Some("Make microsite"),
-  cond = Some(docsCond)
-)
-
-ThisBuild / githubWorkflowPublishPreamble ++= rubySetupSteps(None)
-
-ThisBuild / githubWorkflowPublish += WorkflowStep.Sbt(
-  List("docs/publishMicrosite"),
-  name = Some(s"Publish microsite")
-)
-
-lazy val root = tlCrossRootProject.aggregate(core)
+lazy val root = tlCrossRootProject.aggregate(core, docs)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
@@ -62,12 +33,10 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
   )
 
 lazy val docs = project
-  .in(file("docs"))
+  .in(file("site"))
   .settings(tlFatalWarningsInCi := false)
-  .settings(micrositeSettings)
   .dependsOn(core.jvm)
-  .enablePlugins(MicrositesPlugin)
-  .enablePlugins(MdocPlugin)
+  .enablePlugins(TypelevelSitePlugin)
 
 val catsV = "2.7.0"
 val catsEffectV = "3.3.4"
@@ -75,57 +44,6 @@ val disciplineMunitV = "1.0.9"
 val scalacheckEffectV = "1.0.3"
 val munitCatsEffectV = "1.0.7"
 val kindProjectorV = "0.13.2"
-
-lazy val micrositeSettings = {
-  import microsites._
-  Seq(
-    mdocIn := sourceDirectory.value / "main" / "mdoc",
-    micrositeName := "vault",
-    micrositeDescription := "Type-safe, persistent storage for values of arbitrary types",
-    micrositeAuthor := "Typelevel",
-    micrositeGithubOwner := "typelevel",
-    micrositeGithubRepo := "vault",
-    micrositeUrl := "https://typelevel.org",
-    micrositeBaseUrl := "/vault",
-    micrositeDocumentationUrl := "https://www.javadoc.io/doc/typelevel/vault_2.13",
-    micrositeFooterText := None,
-    micrositeHighlightTheme := "atom-one-light",
-    micrositePalette := Map(
-      "brand-primary" -> "#3e5b95",
-      "brand-secondary" -> "#294066",
-      "brand-tertiary" -> "#2d5799",
-      "gray-dark" -> "#49494B",
-      "gray" -> "#7B7B7E",
-      "gray-light" -> "#E5E5E6",
-      "gray-lighter" -> "#F4F3F4",
-      "white-color" -> "#FFFFFF"
-    ),
-    libraryDependencySchemes += "org.typelevel" %% "cats-effect" % VersionScheme.Always,
-    libraryDependencies += "com.47deg" %% "github4s" % "0.28.4",
-    micrositePushSiteWith := GitHub4s,
-    micrositeGithubToken := sys.env.get("GITHUB_TOKEN"),
-    micrositeExtraMdFiles := Map(
-      file("CHANGELOG.md") -> ExtraMdFileConfig("changelog.md",
-                                                "page",
-                                                Map("title" -> "changelog",
-                                                    "section" -> "changelog",
-                                                    "position" -> "100"
-                                                )
-      ),
-      file("CODE_OF_CONDUCT.md") -> ExtraMdFileConfig("code-of-conduct.md",
-                                                      "page",
-                                                      Map("title" -> "code of conduct",
-                                                          "section" -> "code of conduct",
-                                                          "position" -> "101"
-                                                      )
-      ),
-      file("LICENSE") -> ExtraMdFileConfig("license.md",
-                                           "page",
-                                           Map("title" -> "license", "section" -> "license", "position" -> "102")
-      )
-    )
-  )
-}
 
 // Scalafmt
 addCommandAlias("fmt", "; Compile / scalafmt; Test / scalafmt; scalafmtSbt")
