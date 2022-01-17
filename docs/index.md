@@ -19,7 +19,7 @@ To use vault in an existing SBT project with Scala 2.11 or a later version, add 
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "vault" % "<version>",
+  "org.typelevel" %% "vault" % "@VERSION@",
 )
 ```
 
