@@ -1,30 +1,12 @@
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-
 val Scala212 = "2.12.15"
 val Scala213 = "2.13.7"
 val Scala3 = "3.0.2"
 
-ThisBuild / baseVersion := "3.1"
-ThisBuild / crossScalaVersions := Seq(Scala212, Scala213, Scala3)
-ThisBuild / scalaVersion := crossScalaVersions.value.filter(_.startsWith("2.")).last
-ThisBuild / publishFullName := "Christopher Davenport"
-ThisBuild / publishGithubUser := "christopherdavenport"
-
-ThisBuild / versionIntroduced := Map(
-  // First versions after the Typelevel move
-  "2.12" -> "2.1.0",
-  "2.13" -> "2.1.0",
-  "3.0.0-RC2" -> "2.1.9",
-  "3.0.0-RC3" -> "2.1.10"
-)
-
-ThisBuild / spiewakMainBranches := Seq("main", "series/2.x")
-
-enablePlugins(SonatypeCiReleasePlugin)
-
-ThisBuild / githubWorkflowArtifactUpload := false
-
-val Scala212Cond = s"matrix.scala == '$Scala212'"
+ThisBuild / tlBaseVersion := "3.1"
+ThisBuild / crossScalaVersions := Seq(Scala212, Scala3, Scala213)
+ThisBuild / tlVersionIntroduced := Map("3" -> "3.0.3")
+ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
+startYear := Some(2021)
 
 def rubySetupSteps(cond: Option[String]) = Seq(
   WorkflowStep.Use(UseRef.Public("ruby", "setup-ruby", "v1"),
@@ -44,56 +26,39 @@ val JDK17 = JavaSpec.temurin("17")
 
 ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK11, JDK17)
 
+val docsCond = s"matrix.scala == '$Scala213' && matrix.project == 'rootJVM'"
+
 ThisBuild / githubWorkflowBuildPreamble ++=
-  rubySetupSteps(Some(Scala212Cond))
+  rubySetupSteps(Some(docsCond))
 
-ThisBuild / githubWorkflowBuild := Seq(WorkflowStep.Sbt(List("headerCheckAll", "test", "mimaReportBinaryIssues")),
-                                       WorkflowStep.Sbt(List("docs/makeMicrosite"), cond = Some(Scala212Cond))
+ThisBuild / githubWorkflowBuild += WorkflowStep.Sbt(
+  List("docs/makeMicrosite"),
+  name = Some("Make microsite"),
+  cond = Some(docsCond)
 )
 
-ThisBuild / githubWorkflowTargetBranches := List("*", "series/*")
-ThisBuild / githubWorkflowTargetTags ++= Seq("v*")
+ThisBuild / githubWorkflowPublishPreamble ++= rubySetupSteps(Some(docsCond))
 
-// currently only publishing tags
-ThisBuild / githubWorkflowPublishTargetBranches :=
-  Seq(RefPredicate.StartsWith(Ref.Tag("v")))
-
-ThisBuild / githubWorkflowPublishPreamble ++=
-  rubySetupSteps(None)
-
-ThisBuild / githubWorkflowPublish := Seq(
-  WorkflowStep.Sbt(List("release")),
-  WorkflowStep.Sbt(List(s"++${Scala212}", "docs/publishMicrosite"), name = Some(s"Publish microsite"))
+ThisBuild / githubWorkflowPublish += WorkflowStep.Sbt(
+  List("docs/publishMicrosite"),
+  name = Some(s"Publish microsite")
 )
 
-lazy val vault = project
-  .in(file("."))
-  .enablePlugins(NoPublishPlugin)
-  .settings(commonSettings, releaseSettings)
-  .aggregate(coreJVM, coreJS)
+lazy val root = tlCrossRootProject.aggregate(core)
 
 lazy val core = crossProject(JSPlatform, JVMPlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
-  .settings(commonSettings, releaseSettings)
+  .settings(commonSettings)
   .settings(
     name := "vault"
   )
   .jsSettings(scalaJSLinkerConfig ~= (_.withModuleKind(ModuleKind.CommonJSModule)))
 
-lazy val coreJVM = core.jvm
-lazy val coreJS = core.js
-
 lazy val docs = project
   .in(file("docs"))
-  .settings(
-    commonSettings,
-    releaseSettings,
-    micrositeSettings,
-    publish / skip := true,
-    githubWorkflowArtifactUpload := false
-  )
-  .dependsOn(coreJVM)
+  .settings(micrositeSettings)
+  .dependsOn(core.jvm)
   .enablePlugins(MicrositesPlugin)
   .enablePlugins(MdocPlugin)
 
@@ -106,14 +71,6 @@ val kindProjectorV = "0.13.2"
 
 // General Settings
 lazy val commonSettings = Seq(
-  organization := "org.typelevel",
-  libraryDependencies ++= (
-    if (ScalaArtifacts.isScala3(scalaVersion.value)) Nil
-    else
-      Seq(
-        compilerPlugin(("org.typelevel" % "kind-projector" % kindProjectorV).cross(CrossVersion.full))
-      )
-  ),
   libraryDependencies ++= Seq(
     "org.typelevel" %%% "cats-core" % catsV,
     "org.typelevel" %%% "cats-effect" % catsEffectV,
@@ -127,20 +84,6 @@ lazy val commonSettings = Seq(
     Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)
   ))
 )
-
-lazy val releaseSettings = {
-  Seq(
-    Test / publishArtifact := false,
-    scmInfo := Some(
-      ScmInfo(
-        url("https://github.com/typelevel/vault"),
-        "git@github.com:typelevel/vault.git"
-      )
-    ),
-    homepage := Some(url("https://github.com/typelevel/vault")),
-    licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
-  )
-}
 
 lazy val micrositeSettings = {
   import microsites._
