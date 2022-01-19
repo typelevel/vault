@@ -7,7 +7,7 @@ ThisBuild / crossScalaVersions := Seq(Scala212, Scala3, Scala213)
 ThisBuild / tlVersionIntroduced := Map("3" -> "3.0.3")
 ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
 ThisBuild / startYear := Some(2021)
-ThisBuild / tlApiDocsUrl := Some(url("https://www.javadoc.io/doc/org.typelevel/vault_2.13/latest/org/typelevel/vault/"))
+ThisBuild / tlSiteApiUrl := Some(url("https://www.javadoc.io/doc/org.typelevel/vault_2.13/latest/org/typelevel/vault/"))
 
 val JDK8 = JavaSpec.temurin("8")
 val JDK11 = JavaSpec.temurin("11")
