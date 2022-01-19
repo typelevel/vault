@@ -1,9 +1,6 @@
----
-layout: home
+# vault
 
----
-
-# vault [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12)
 
 ## Project Goals
 
@@ -22,7 +19,7 @@ To use vault in an existing SBT project with Scala 2.11 or a later version, add 
 
 ```scala
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "vault" % "<version>",
+  "org.typelevel" %% "vault" % "@VERSION@",
 )
 ```
 
