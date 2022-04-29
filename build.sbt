@@ -41,7 +41,7 @@ lazy val docs = project
 val catsV = "2.7.0"
 val catsEffectV = "3.3.11"
 val disciplineMunitV = "1.0.9"
-val scalacheckEffectV = "1.0.3"
+val scalacheckEffectV = "1.0.4"
 val munitCatsEffectV = "1.0.7"
 val kindProjectorV = "0.13.2"
 
