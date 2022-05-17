@@ -22,6 +22,8 @@ enablePlugins(SonatypeCiReleasePlugin)
 
 ThisBuild / githubWorkflowArtifactUpload := false
 
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+
 val Scala212Cond = s"matrix.scala == '$Scala212'"
 
 def rubySetupSteps(cond: Option[String]) = Seq(
