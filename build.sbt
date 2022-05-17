@@ -113,7 +113,7 @@ lazy val commonSettings = Seq(
   ),
   // Cursed tags
   mimaPreviousArtifacts ~= (_.filterNot(m =>
-    Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12").contains(m.revision)
+    Set("2.1.1", "2.1.2", "2.1.3", "2.1.4", "2.1.5", "2.1.6", "2.1.11", "2.1.12", "2.2.0").contains(m.revision)
   )
   )
 )
