@@ -5,9 +5,14 @@ val Scala3 = "3.1.2"
 ThisBuild / tlBaseVersion := "3.2"
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala3, Scala213)
 ThisBuild / tlVersionIntroduced := Map("3" -> "3.0.3")
+ThisBuild / tlMimaPreviousVersions ~= (_.filterNot(_ == "3.2.0"))
 ThisBuild / licenses := List("MIT" -> url("http://opensource.org/licenses/MIT"))
 ThisBuild / startYear := Some(2021)
 ThisBuild / tlSiteApiUrl := Some(url("https://www.javadoc.io/doc/org.typelevel/vault_2.13/latest/org/typelevel/vault/"))
+
+ThisBuild / developers := List(
+  tlGitHubDev("christopherdavenport", "Christopher Davenport")
+)
 
 val JDK8 = JavaSpec.temurin("8")
 val JDK11 = JavaSpec.temurin("11")
