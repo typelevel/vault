@@ -47,10 +47,10 @@ lazy val docs = project
   .enablePlugins(TypelevelSitePlugin)
 
 val catsV = "2.8.0"
-val catsEffectV = "3.3.14-1-5d11fe9"
+val catsEffectV = "3.3.14"
 val disciplineMunitV = "2.0.0-M3"
-val scalacheckEffectV = "2.0-9366e44"
-val munitCatsEffectV = "2.0-5e03bfc"
+val scalacheckEffectV = "2.0.0-M2"
+val munitCatsEffectV = "2.0.0-M3"
 val kindProjectorV = "0.13.2"
 
 // Scalafmt
