@@ -22,7 +22,7 @@ ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK11, JDK17)
 
 lazy val root = tlCrossRootProject.aggregate(core)
 
-lazy val core = crossProject(JSPlatform, JVMPlatform)
+lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   .crossType(CrossType.Pure)
   .in(file("core"))
   .settings(
@@ -33,8 +33,11 @@ lazy val core = crossProject(JSPlatform, JVMPlatform)
       "org.typelevel" %%% "cats-laws" % catsV % Test,
       "org.typelevel" %%% "discipline-munit" % disciplineMunitV % Test,
       "org.typelevel" %%% "scalacheck-effect-munit" % scalacheckEffectV % Test,
-      "org.typelevel" %%% "munit-cats-effect-3" % munitCatsEffectV % Test
+      "org.typelevel" %%% "munit-cats-effect" % munitCatsEffectV % Test
     )
+  )
+  .nativeSettings(
+    tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "3.2.2").toMap
   )
 
 lazy val docs = project
@@ -45,9 +48,9 @@ lazy val docs = project
 
 val catsV = "2.8.0"
 val catsEffectV = "3.3.14"
-val disciplineMunitV = "1.0.9"
-val scalacheckEffectV = "1.0.4"
-val munitCatsEffectV = "1.0.7"
+val disciplineMunitV = "2.0.0-M3"
+val scalacheckEffectV = "2.0.0-M2"
+val munitCatsEffectV = "2.0.0-M3"
 val kindProjectorV = "0.13.2"
 
 // Scalafmt
