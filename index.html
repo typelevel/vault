@@ -109,7 +109,7 @@
         <p>To use vault in an existing SBT project with Scala 2.11 or a later version, add the following dependencies to your
         <code>build.sbt</code> depending on your needs:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">libraryDependencies</span><span> ++= </span><span class="type-name">Seq</span><span>(
-  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %% </span><span class="string-literal">&quot;vault&quot;</span><span> % </span><span class="string-literal">&quot;3.2.1&quot;</span><span>,
+  </span><span class="string-literal">&quot;org.typelevel&quot;</span><span> %% </span><span class="string-literal">&quot;vault&quot;</span><span> % </span><span class="string-literal">&quot;3.3.0&quot;</span><span>,
 )</span></code></pre>
         <p>First the imports</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
@@ -135,10 +135,10 @@
 </span><span class="comment">// basicLookup: IO[Option[Bar]] = Map(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
@@ -164,10 +164,10 @@
 </span><span class="comment">// lookupValuesOfDifferentTypes: IO[Option[(Bar, String, String)]] = FlatMap(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
@@ -192,10 +192,10 @@
 </span><span class="comment">// emptyLookup: IO[Option[Bar]] = Map(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
@@ -216,10 +216,10 @@
 </span><span class="comment">// doubleInsertTakesMostRecent: IO[Option[Bar]] = Map(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
@@ -240,10 +240,10 @@
 </span><span class="comment">// mergedVaultsTakesLatter: IO[Option[Bar]] = Map(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
@@ -264,10 +264,10 @@
 </span><span class="comment">// deletedKeyIsMissing: IO[Option[Bar]] = Map(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
@@ -287,10 +287,10 @@
 </span><span class="comment">// lockerExample: IO[Option[Bar]] = Map(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
@@ -310,10 +310,10 @@
 </span><span class="comment">// wrongLockerExample: IO[Option[Bar]] = FlatMap(
 //   ioe = Map(
 //     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10972/1066737590@4d15a0a9,
+//       thunk = cats.effect.kernel.Sync$$Lambda$10899/1467451771@23a2a76e,
 //       event = cats.effect.tracing.TracingEvent$StackTrace
 //     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10974/1013963267@3047889a,
+//     f = org.typelevel.vault.Key$$$Lambda$10901/1796861968@7d4744d5,
 //     event = cats.effect.tracing.TracingEvent$StackTrace
 //   ),
 //   f = &lt;function1&gt;,
