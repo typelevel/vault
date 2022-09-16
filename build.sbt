@@ -15,10 +15,9 @@ ThisBuild / developers := List(
 )
 
 val JDK8 = JavaSpec.temurin("8")
-val JDK11 = JavaSpec.temurin("11")
 val JDK17 = JavaSpec.temurin("17")
 
-ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK11, JDK17)
+ThisBuild / githubWorkflowJavaVersions := Seq(JDK8, JDK17)
 
 lazy val root = tlCrossRootProject.aggregate(core)
 
