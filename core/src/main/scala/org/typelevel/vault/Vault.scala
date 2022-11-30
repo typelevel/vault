@@ -80,6 +80,11 @@ final class Vault private (private val m: Map[Unique.Token, Locker]) {
    * Merge Two Vaults. `that` is prioritized.
    */
   def ++(that: Vault): Vault = new Vault(this.m ++ that.m)
+
+  /**
+   * The size of the vault
+   */
+  def size: Int = m.size
 }
 object Vault {
 
