@@ -37,7 +37,7 @@ import cats.effect.unsafe.implicits.global
 
 Then some basic operations
 
-```scala mdoc
+```scala mdoc:silent
 case class Bar(a: String, b: Int, c: Long)
 
 // Creating keys are effects, but interacting with the vault
@@ -50,9 +50,13 @@ val basicLookup = for {
     .insert(key, Bar("", 1, 2L))
     .lookup(key)
 }
+```
 
+```scala mdoc
 basicLookup.unsafeRunSync
+```
 
+```scala mdoc:silent
 val lookupValuesOfDifferentTypes = for {
   key1 <- Key.newKey[IO, Bar]
   key2 <- Key.newKey[IO, String]
@@ -66,18 +70,26 @@ val lookupValuesOfDifferentTypes = for {
   (myvault.lookup(key1), myvault.lookup(key2), myvault.lookup(key3))
     .mapN((_,_,_))
 }
+```
 
+```scala mdoc
 lookupValuesOfDifferentTypes.unsafeRunSync
+```
 
+```scala mdoc:silent
 val emptyLookup = for {
   key <- Key.newKey[IO, Bar]
 } yield {
   Vault.empty
     .lookup(key)
 }
+```
 
+```scala mdoc
 emptyLookup.unsafeRunSync
+```
 
+```scala mdoc:silent
 val doubleInsertTakesMostRecent = for {
   key <- Key.newKey[IO, Bar]
 } yield {
@@ -86,9 +98,13 @@ val doubleInsertTakesMostRecent = for {
     .insert(key, Bar("Monkey", 7, 5L))
     .lookup(key)
 }
+```
 
+```scala mdoc
 doubleInsertTakesMostRecent.unsafeRunSync
+```
 
+```scala mdoc:silent
 val mergedVaultsTakesLatter = for {
   key <- Key.newKey[IO, Bar]
 } yield {
@@ -97,9 +113,13 @@ val mergedVaultsTakesLatter = for {
     Vault.empty.insert(key, Bar("Monkey", 7, 5L))
   ).lookup(key)
 }
+```
 
+```scala mdoc
 mergedVaultsTakesLatter.unsafeRunSync
+```
 
+```scala mdoc:silent
 val deletedKeyIsMissing = for {
   key <- Key.newKey[IO, Bar]
 } yield {
@@ -108,23 +128,29 @@ val deletedKeyIsMissing = for {
     .delete(key)
     .lookup(key)
 }
+```
 
+```scala mdoc
 deletedKeyIsMissing.unsafeRunSync
 ```
 
 We can also interact with a single value `locker` instead of the
 larger datastructure that a `vault` enables.
 
-```scala mdoc
+```scala mdoc:silent
 val lockerExample = for {
   key <- Key.newKey[IO, Bar]
 } yield {
   Locker(key, Bar("", 1, 2L))
     .unlock(key)
 }
+```
 
+```scala mdoc
 lockerExample.unsafeRunSync
+```
 
+```scala mdoc:silent
 val wrongLockerExample = for {
   key <- Key.newKey[IO, Bar]
   key2 <- Key.newKey[IO, Bar]
@@ -132,6 +158,8 @@ val wrongLockerExample = for {
   Locker(key, Bar("", 1, 2L))
     .unlock(key2)
 }
+```
 
+```scala mdoc
 wrongLockerExample.unsafeRunSync
 ```
