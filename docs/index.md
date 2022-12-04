@@ -30,7 +30,7 @@ import cats.effect._
 import cats.implicits._
 import org.typelevel.vault._
 
-// Importing global cats-effect runtime to allow .unsafeRunSync; 
+// Importing global cats-effect runtime to allow .unsafeRunSync();
 // In real code you should follow cats-effect advice on obtaining a runtime
 import cats.effect.unsafe.implicits.global
 ```
@@ -53,7 +53,7 @@ val basicLookup = for {
 ```
 
 ```scala mdoc
-basicLookup.unsafeRunSync
+basicLookup.unsafeRunSync()
 ```
 
 ```scala mdoc:silent
@@ -73,7 +73,7 @@ val lookupValuesOfDifferentTypes = for {
 ```
 
 ```scala mdoc
-lookupValuesOfDifferentTypes.unsafeRunSync
+lookupValuesOfDifferentTypes.unsafeRunSync()
 ```
 
 ```scala mdoc:silent
@@ -86,7 +86,7 @@ val emptyLookup = for {
 ```
 
 ```scala mdoc
-emptyLookup.unsafeRunSync
+emptyLookup.unsafeRunSync()
 ```
 
 ```scala mdoc:silent
@@ -101,7 +101,7 @@ val doubleInsertTakesMostRecent = for {
 ```
 
 ```scala mdoc
-doubleInsertTakesMostRecent.unsafeRunSync
+doubleInsertTakesMostRecent.unsafeRunSync()
 ```
 
 ```scala mdoc:silent
@@ -116,7 +116,7 @@ val mergedVaultsTakesLatter = for {
 ```
 
 ```scala mdoc
-mergedVaultsTakesLatter.unsafeRunSync
+mergedVaultsTakesLatter.unsafeRunSync()
 ```
 
 ```scala mdoc:silent
@@ -131,7 +131,7 @@ val deletedKeyIsMissing = for {
 ```
 
 ```scala mdoc
-deletedKeyIsMissing.unsafeRunSync
+deletedKeyIsMissing.unsafeRunSync()
 ```
 
 We can also interact with a single value `locker` instead of the
@@ -147,7 +147,7 @@ val lockerExample = for {
 ```
 
 ```scala mdoc
-lockerExample.unsafeRunSync
+lockerExample.unsafeRunSync()
 ```
 
 ```scala mdoc:silent
@@ -161,5 +161,5 @@ val wrongLockerExample = for {
 ```
 
 ```scala mdoc
-wrongLockerExample.unsafeRunSync
+wrongLockerExample.unsafeRunSync()
 ```
