@@ -116,11 +116,11 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">typelevel</span><span>.</span><span class="identifier">vault</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="comment">// Importing global cats-effect runtime to allow .unsafeRunSync; 
+</span><span class="comment">// Importing global cats-effect runtime to allow .unsafeRunSync();
 // In real code you should follow cats-effect advice on obtaining a runtime
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">unsafe</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">global</span></code></pre>
         <p>Then some basic operations</p>
-        <pre><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Bar</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">b</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">c</span><span>: </span><span class="type-name">Long</span><span>)
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Bar</span><span>(</span><span class="identifier">a</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">b</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">c</span><span>: </span><span class="type-name">Long</span><span>)
 
 </span><span class="comment">// Creating keys are effects, but interacting with the vault
 // not, it acts like a simple persistent store.
@@ -131,24 +131,10 @@
   </span><span class="type-name">Vault</span><span>.</span><span class="identifier">empty</span><span>
     .</span><span class="identifier">insert</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2L</span><span>))
     .</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
-}
-</span><span class="comment">// basicLookup: IO[Option[Bar]] = Map(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">basicLookup</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
-</span><span class="comment">// res0: Option[Bar] = Some(value = Bar(a = &quot;&quot;, b = 1, c = 2L))
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">lookupValuesOfDifferentTypes</span><span> = </span><span class="keyword">for</span><span> {
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">basicLookup</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// res0: Option[Bar] = Some(value = Bar(a = &quot;&quot;, b = 1, c = 2L))</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">lookupValuesOfDifferentTypes</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key1</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
   </span><span class="identifier">key2</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">String</span><span>]
   </span><span class="identifier">key3</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">String</span><span>]
@@ -160,167 +146,71 @@
   
   (</span><span class="identifier">myvault</span><span>.</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key1</span><span>), </span><span class="identifier">myvault</span><span>.</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key2</span><span>), </span><span class="identifier">myvault</span><span>.</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key3</span><span>))
     .</span><span class="identifier">mapN</span><span>((</span><span class="identifier">_</span><span>,</span><span class="identifier">_</span><span>,</span><span class="identifier">_</span><span>))
-}
-</span><span class="comment">// lookupValuesOfDifferentTypes: IO[Option[(Bar, String, String)]] = FlatMap(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">lookupValuesOfDifferentTypes</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">lookupValuesOfDifferentTypes</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
 </span><span class="comment">// res1: Option[(Bar, String, String)] = Some(
 //   value = (
 //     Bar(a = &quot;&quot;, b = 1, c = 2L),
 //     &quot;I&#39;m at Key2&quot;,
 //     &quot;Key3 Reporting for Duty!&quot;
 //   )
-// )
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">emptyLookup</span><span> = </span><span class="keyword">for</span><span> {
+// )</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">emptyLookup</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
   </span><span class="type-name">Vault</span><span>.</span><span class="identifier">empty</span><span>
     .</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
-}
-</span><span class="comment">// emptyLookup: IO[Option[Bar]] = Map(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">emptyLookup</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
-</span><span class="comment">// res2: Option[Bar] = None
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">doubleInsertTakesMostRecent</span><span> = </span><span class="keyword">for</span><span> {
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">emptyLookup</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// res2: Option[Bar] = None</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">doubleInsertTakesMostRecent</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
   </span><span class="type-name">Vault</span><span>.</span><span class="identifier">empty</span><span>
     .</span><span class="identifier">insert</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2L</span><span>))
     .</span><span class="identifier">insert</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;Monkey&quot;</span><span>, </span><span class="number-literal">7</span><span>, </span><span class="number-literal">5L</span><span>))
     .</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
-}
-</span><span class="comment">// doubleInsertTakesMostRecent: IO[Option[Bar]] = Map(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">doubleInsertTakesMostRecent</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
-</span><span class="comment">// res3: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">mergedVaultsTakesLatter</span><span> = </span><span class="keyword">for</span><span> {
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">doubleInsertTakesMostRecent</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// res3: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">mergedVaultsTakesLatter</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
   (
     </span><span class="type-name">Vault</span><span>.</span><span class="identifier">empty</span><span>.</span><span class="identifier">insert</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2L</span><span>)) ++
     </span><span class="type-name">Vault</span><span>.</span><span class="identifier">empty</span><span>.</span><span class="identifier">insert</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;Monkey&quot;</span><span>, </span><span class="number-literal">7</span><span>, </span><span class="number-literal">5L</span><span>))
   ).</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
-}
-</span><span class="comment">// mergedVaultsTakesLatter: IO[Option[Bar]] = Map(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">mergedVaultsTakesLatter</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
-</span><span class="comment">// res4: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">deletedKeyIsMissing</span><span> = </span><span class="keyword">for</span><span> {
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">mergedVaultsTakesLatter</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// res4: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">deletedKeyIsMissing</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
   </span><span class="type-name">Vault</span><span>.</span><span class="identifier">empty</span><span>
     .</span><span class="identifier">insert</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2L</span><span>))
     .</span><span class="identifier">delete</span><span>(</span><span class="identifier">key</span><span>)
     .</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
-}
-</span><span class="comment">// deletedKeyIsMissing: IO[Option[Bar]] = Map(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">deletedKeyIsMissing</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">deletedKeyIsMissing</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
 </span><span class="comment">// res5: Option[Bar] = None</span></code></pre>
         <p>We can also interact with a single value <code>locker</code> instead of the
         larger datastructure that a <code>vault</code> enables.</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">lockerExample</span><span> = </span><span class="keyword">for</span><span> {
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">lockerExample</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
   </span><span class="type-name">Locker</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2L</span><span>))
     .</span><span class="identifier">unlock</span><span>(</span><span class="identifier">key</span><span>)
-}
-</span><span class="comment">// lockerExample: IO[Option[Bar]] = Map(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">lockerExample</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
-</span><span class="comment">// res6: Option[Bar] = Some(value = Bar(a = &quot;&quot;, b = 1, c = 2L))
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">wrongLockerExample</span><span> = </span><span class="keyword">for</span><span> {
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">lockerExample</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// res6: Option[Bar] = Some(value = Bar(a = &quot;&quot;, b = 1, c = 2L))</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">wrongLockerExample</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
   </span><span class="identifier">key2</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
   </span><span class="type-name">Locker</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2L</span><span>))
     .</span><span class="identifier">unlock</span><span>(</span><span class="identifier">key2</span><span>)
-}
-</span><span class="comment">// wrongLockerExample: IO[Option[Bar]] = FlatMap(
-//   ioe = Map(
-//     ioe = Delay(
-//       thunk = cats.effect.kernel.Sync$$Lambda$10294/208775072@45af8ca4,
-//       event = cats.effect.tracing.TracingEvent$StackTrace
-//     ),
-//     f = org.typelevel.vault.Key$$$Lambda$10296/897798766@4e83e0cd,
-//     event = cats.effect.tracing.TracingEvent$StackTrace
-//   ),
-//   f = &lt;function1&gt;,
-//   event = cats.effect.tracing.TracingEvent$StackTrace
-// )
-</span><span>
-</span><span class="identifier">wrongLockerExample</span><span>.</span><span class="identifier">unsafeRunSync</span><span>
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">wrongLockerExample</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
 </span><span class="comment">// res7: Option[Bar] = None</span></code></pre>
 
         <hr style="margin-top: 30px"/>
