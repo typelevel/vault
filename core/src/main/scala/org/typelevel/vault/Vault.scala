@@ -46,6 +46,11 @@ final class Vault private (private val m: Map[Unique.Token, Locker]) {
   private[vault] def lookup[A](k: Key[A]): Option[A] = lookup(k: LookupKey[A])
 
   /**
+   * Checks if the value of a key is in this vault
+   */
+  def contains[A](k: LookupKey[A]): Boolean = m.contains(k.unique)
+
+  /**
    * Insert a value for a given key. Overwrites any previous value.
    */
   def insert[A](k: InsertKey[A], a: A): Vault = new Vault(m + (k.unique -> Locker(k, a)))
