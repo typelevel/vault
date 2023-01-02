@@ -57,6 +57,20 @@ basicLookup.unsafeRunSync()
 ```
 
 ```scala mdoc:silent
+val containsKey = for {
+  key <- Key.newKey[IO, Bar]
+} yield {
+  Vault.empty
+    .insert(key, Bar("", 1, 2L))
+    .contains(key)
+}
+```
+
+```scala mdoc
+containsKey.unsafeRunSync()
+```
+
+```scala mdoc:silent
 val lookupValuesOfDifferentTypes = for {
   key1 <- Key.newKey[IO, Bar]
   key2 <- Key.newKey[IO, String]

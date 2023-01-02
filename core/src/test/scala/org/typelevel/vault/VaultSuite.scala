@@ -110,4 +110,30 @@ class VaultSuite extends CatsEffectSuite with ScalaCheckEffectSuite {
     }
   }
 
+  test("Vault contains should be true for inserted values") {
+    PropF.forAllF { (i: Int) =>
+      val emptyVault: Vault = Vault.empty
+      val test = Key.newKey[IO, Int].map(k => emptyVault.insert(k, i).contains(k))
+
+      assertIO(test, true)
+    }
+  }
+
+  test("Vault contains should be false for keys not inserted") {
+    PropF.forAllF { (i: Int) =>
+      val test = for {
+        key1 <- Key.newKey[IO, Int]
+        key2 <- Key.newKey[IO, Int]
+      } yield Vault.empty.insert(key1, i).contains(key2)
+
+      assertIO(test, false)
+    }
+  }
+
+  test("Vault contains should be false when empty") {
+    val emptyVault: Vault = Vault.empty
+    val test = Key.newKey[IO, Int].map(k => emptyVault.contains(k))
+
+    assertIO(test, false)
+  }
 }
