@@ -134,6 +134,15 @@
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">basicLookup</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
 </span><span class="comment">// res0: Option[Bar] = Some(value = Bar(a = &quot;&quot;, b = 1, c = 2L))</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">containsKey</span><span> = </span><span class="keyword">for</span><span> {
+  </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
+} </span><span class="keyword">yield</span><span> {
+  </span><span class="type-name">Vault</span><span>.</span><span class="identifier">empty</span><span>
+    .</span><span class="identifier">insert</span><span>(</span><span class="identifier">key</span><span>, </span><span class="type-name">Bar</span><span>(</span><span class="string-literal">&quot;&quot;</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2L</span><span>))
+    .</span><span class="identifier">contains</span><span>(</span><span class="identifier">key</span><span>)
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">containsKey</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// res1: Boolean = true</span></code></pre>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">lookupValuesOfDifferentTypes</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key1</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
   </span><span class="identifier">key2</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">String</span><span>]
@@ -148,7 +157,7 @@
     .</span><span class="identifier">mapN</span><span>((</span><span class="identifier">_</span><span>,</span><span class="identifier">_</span><span>,</span><span class="identifier">_</span><span>))
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">lookupValuesOfDifferentTypes</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res1: Option[(Bar, String, String)] = Some(
+</span><span class="comment">// res2: Option[(Bar, String, String)] = Some(
 //   value = (
 //     Bar(a = &quot;&quot;, b = 1, c = 2L),
 //     &quot;I&#39;m at Key2&quot;,
@@ -162,7 +171,7 @@
     .</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">emptyLookup</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res2: Option[Bar] = None</span></code></pre>
+</span><span class="comment">// res3: Option[Bar] = None</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">doubleInsertTakesMostRecent</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
@@ -172,7 +181,7 @@
     .</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">doubleInsertTakesMostRecent</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res3: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))</span></code></pre>
+</span><span class="comment">// res4: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">mergedVaultsTakesLatter</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
@@ -182,7 +191,7 @@
   ).</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">mergedVaultsTakesLatter</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res4: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))</span></code></pre>
+</span><span class="comment">// res5: Option[Bar] = Some(value = Bar(a = &quot;Monkey&quot;, b = 7, c = 5L))</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">deletedKeyIsMissing</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
 } </span><span class="keyword">yield</span><span> {
@@ -192,7 +201,7 @@
     .</span><span class="identifier">lookup</span><span>(</span><span class="identifier">key</span><span>)
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">deletedKeyIsMissing</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res5: Option[Bar] = None</span></code></pre>
+</span><span class="comment">// res6: Option[Bar] = None</span></code></pre>
         <p>We can also interact with a single value <code>locker</code> instead of the
         larger datastructure that a <code>vault</code> enables.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">lockerExample</span><span> = </span><span class="keyword">for</span><span> {
@@ -202,7 +211,7 @@
     .</span><span class="identifier">unlock</span><span>(</span><span class="identifier">key</span><span>)
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">lockerExample</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res6: Option[Bar] = Some(value = Bar(a = &quot;&quot;, b = 1, c = 2L))</span></code></pre>
+</span><span class="comment">// res7: Option[Bar] = Some(value = Bar(a = &quot;&quot;, b = 1, c = 2L))</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">wrongLockerExample</span><span> = </span><span class="keyword">for</span><span> {
   </span><span class="identifier">key</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
   </span><span class="identifier">key2</span><span> &lt;- </span><span class="type-name">Key</span><span>.</span><span class="identifier">newKey</span><span>[</span><span class="type-name">IO</span><span>, </span><span class="type-name">Bar</span><span>]
@@ -211,7 +220,7 @@
     .</span><span class="identifier">unlock</span><span>(</span><span class="identifier">key2</span><span>)
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">wrongLockerExample</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res7: Option[Bar] = None</span></code></pre>
+</span><span class="comment">// res8: Option[Bar] = None</span></code></pre>
 
         <hr style="margin-top: 30px"/>
         <footer style="font-size: 90%; text-align: center">
