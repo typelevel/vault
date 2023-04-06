@@ -3,4 +3,4 @@ val sbtTypelevelVersion = "0.4.19"
 addSbtPlugin("org.typelevel" % "sbt-typelevel" % sbtTypelevelVersion)
 addSbtPlugin("org.typelevel" % "sbt-typelevel-site" % sbtTypelevelVersion)
 addSbtPlugin("org.scala-native" % "sbt-scala-native" % "0.4.12")
-addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.2.0")
+addSbtPlugin("org.portable-scala" % "sbt-scala-native-crossproject" % "1.3.0")
