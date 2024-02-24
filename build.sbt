@@ -50,7 +50,7 @@ val catsEffectV = "3.5.3"
 val disciplineMunitV = "2.0.0-M3"
 val scalacheckEffectV = "2.0.0-M2"
 val munitCatsEffectV = "2.0.0-M4"
-val kindProjectorV = "0.13.2"
+val kindProjectorV = "0.13.3"
 
 // Scalafmt
 addCommandAlias("fmt", "; Compile / scalafmt; Test / scalafmt; scalafmtSbt")
