@@ -1,5 +1,5 @@
 val Scala212 = "2.12.19"
-val Scala213 = "2.13.12"
+val Scala213 = "2.13.13"
 val Scala3 = "3.3.1"
 
 ThisBuild / tlBaseVersion := "3.5"
@@ -41,7 +41,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
 
 lazy val docs = project
   .in(file("site"))
-  .settings(tlFatalWarningsInCi := false)
+  .settings(tlFatalWarnings := false)
   .dependsOn(core.jvm)
   .enablePlugins(TypelevelSitePlugin)
 
