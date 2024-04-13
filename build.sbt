@@ -49,7 +49,7 @@ val catsV = "2.10.0"
 val catsEffectV = "3.5.4"
 val disciplineMunitV = "2.0.0-M3"
 val scalacheckEffectV = "2.0.0-M2"
-val munitCatsEffectV = "2.0.0-M4"
+val munitCatsEffectV = "2.0.0-M5"
 val kindProjectorV = "0.13.3"
 
 // Scalafmt
