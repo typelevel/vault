@@ -2,7 +2,7 @@ val Scala212 = "2.12.19"
 val Scala213 = "2.13.14"
 val Scala3 = "3.3.3"
 
-ThisBuild / tlBaseVersion := "3.5"
+ThisBuild / tlBaseVersion := "3.6"
 ThisBuild / crossScalaVersions := Seq(Scala212, Scala3, Scala213)
 ThisBuild / tlVersionIntroduced := Map("3" -> "3.0.3")
 ThisBuild / tlMimaPreviousVersions ~= (_.filterNot(_ == "3.2.0"))
