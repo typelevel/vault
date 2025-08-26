@@ -36,7 +36,7 @@ lazy val core = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     )
   )
   .nativeSettings(
-    tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "3.2.2").toMap
+    tlVersionIntroduced := List("2.12", "2.13", "3").map(_ -> "3.7.0").toMap
   )
 
 lazy val docs = project
@@ -45,11 +45,11 @@ lazy val docs = project
   .dependsOn(core.jvm)
   .enablePlugins(TypelevelSitePlugin)
 
-val catsV = "2.11.0"
-val catsEffectV = "3.6.3"
-val disciplineMunitV = "2.0.0-M3"
-val scalacheckEffectV = "2.0.0-M2"
-val munitCatsEffectV = "2.1.0"
+val catsV = "2.13.0"
+val catsEffectV = "3.7.0-RC1"
+val disciplineMunitV = "2.0.0"
+val scalacheckEffectV = "2.1.0-RC1"
+val munitCatsEffectV = "2.2.0-RC1"
 val kindProjectorV = "0.13.3"
 
 // Scalafmt
