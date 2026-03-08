@@ -1,4 +1,4 @@
-# vault [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.typelevel/vault_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.typelevel/vault_2.12) ![Continuous Integration](https://github.com/typelevel/vault/workflows/Continuous%20Integration/badge.svg)
+# vault ![Continuous Integration](https://github.com/typelevel/vault/workflows/Continuous%20Integration/badge.svg) [![Maven Central](https://img.shields.io/maven-central/v/org.typelevel/vault_2.13)](https://central.sonatype.com/artifact/org.typelevel/vault_2.13)
 
 Vault is a tiny library that provides a single data structure called vault.
 
