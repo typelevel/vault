@@ -1,6 +1,6 @@
 # vault
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.chrisdavenport/vault-core_2.12)
+[![Maven Central](https://img.shields.io/maven-central/v/org.typelevel/vault_2.13)](https://central.sonatype.com/artifact/org.typelevel/vault_2.13)
 
 ## Project Goals
 
